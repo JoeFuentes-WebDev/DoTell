@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 24px; }
+  h1 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 32px; }
+  .flow-title { font-size: 13px; font-weight: 700; color: #aaa; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #222; }
+  .flow-row { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 40px; flex-wrap: wrap; }
+  .flow-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .arrow { display: flex; align-items: center; padding-top: 40px; color: #444; font-size: 20px; flex-shrink: 0; }
+
+  .mobile { width: 200px; flex-shrink: 0; }
+  .mobile-frame { background: #1a1a1a; border: 1.5px solid #333; border-radius: 28px; padding: 12px; }
+  .mobile-notch { width: 60px; height: 6px; background: #333; border-radius: 3px; margin: 0 auto 10px; }
+  .mobile-screen { background: #fff; border-radius: 16px; min-height: 340px; overflow: hidden; }
+
+  .desktop-frame { background: #1a1a1a; border: 1.5px solid #333; border-radius: 10px; overflow: hidden; margin-bottom: 40px; }
+  .desktop-titlebar { background: #2a2a2a; padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+  .url-bar { flex: 1; background: #1a1a1a; border-radius: 4px; padding: 3px 10px; font-size: 10px; color: #666; margin-left: 8px; }
+  .desktop-screen { background: #fff; }
+
+  .ob-header { background: #18181b; padding: 14px; text-align: center; }
+  .ob-logo { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -1px; }
+  .ob-sub { font-size: 9px; color: #666; margin-top: 2px; }
+  .ob-body { padding: 14px; }
+  .ob-step-indicator { display: flex; gap: 4px; justify-content: center; margin-bottom: 14px; }
+  .ob-dot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; }
+  .ob-dot.active { background: #18181b; width: 16px; border-radius: 3px; }
+  .ob-title { font-size: 12px; font-weight: 700; color: #18181b; margin-bottom: 4px; }
+  .ob-desc { font-size: 9px; color: #666; margin-bottom: 12px; line-height: 1.4; }
+  .ob-field { margin-bottom: 9px; }
+  .ob-label { font-size: 8px; color: #888; font-weight: 600; text-transform: uppercase; margin-bottom: 3px; }
+  .ob-input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 6px; padding: 6px 8px; font-size: 10px; color: #1a1a1a; background: #f9f9f9; }
+  .ob-input.focused { border-color: #18181b; background: #fff; }
+  .btn-primary { width: 100%; background: #18181b; color: #fff; border: none; border-radius: 8px; padding: 9px; font-size: 11px; font-weight: 600; cursor: pointer; margin-top: 6px; }
+  .btn-secondary { width: 100%; background: transparent; color: #888; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 7px; font-size: 10px; cursor: pointer; margin-top: 5px; }
+
+  .qr-scan-area { margin: 10px; border: 2px dashed #e0e0e0; border-radius: 12px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+  .photo-upload { border: 2px dashed #e0e0e0; border-radius: 10px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 4px; background: #fafafa; margin-bottom: 10px; }
+  .photo-text { font-size: 9px; color: #888; text-align: center; }
+
+  .admin-layout { display: flex; min-height: 300px; }
+  .admin-sidebar { width: 170px; background: #18181b; padding: 16px; flex-shrink: 0; }
+  .admin-brand { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+  .admin-biz { font-size: 9px; color: #555; margin-bottom: 18px; }
+  .nav-item { padding: 7px 10px; border-radius: 6px; font-size: 10px; color: #666; margin-bottom: 2px; display: flex; align-items: center; gap: 7px; }
+  .nav-item.active { background: #2a2a2a; color: #fff; }
+  .admin-main { flex: 1; padding: 18px; }
+  .admin-page-title { font-size: 15px; font-weight: 700; color: #18181b; margin-bottom: 3px; }
+  .admin-page-sub { font-size: 10px; color: #888; margin-bottom: 16px; }
+
+  .menu-add-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .add-option { border: 1.5px dashed #d0d0d0; border-radius: 10px; padding: 14px 10px; text-align: center; cursor: pointer; }
+  .opt-icon { font-size: 22px; margin-bottom: 5px; }
+  .opt-title { font-size: 11px; font-weight: 600; color: #18181b; margin-bottom: 3px; }
+  .opt-desc { font-size: 9px; color: #888; line-height: 1.4; }
+
+  .menu-section-title { font-size: 9px; font-weight: 700; text-transform: uppercase; color: #888; letter-spacing: 1px; margin-bottom: 7px; padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; }
+  .menu-item-row { display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid #f7f7f7; }
+  .menu-item-thumb { width: 34px; height: 34px; border-radius: 6px; background: #f0f0f0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .menu-item-name { font-size: 11px; font-weight: 600; color: #18181b; }
+  .menu-item-desc { font-size: 9px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+  .menu-item-price { font-size: 11px; font-weight: 600; color: #18181b; }
+  .toggle-on { width: 26px; height: 15px; background: #18181b; border-radius: 8px; position: relative; flex-shrink: 0; }
+  .toggle-on::after { content: ''; position: absolute; right: 3px; top: 2.5px; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
+  .toggle-off { width: 26px; height: 15px; background: #e0e0e0; border-radius: 8px; position: relative; flex-shrink: 0; }
+  .toggle-off::after { content: ''; position: absolute; left: 3px; top: 2.5px; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
+  .edit-btn { font-size: 9px; color: #888; flex-shrink: 0; }
+
+  .ai-suggestion { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 8px 10px; margin-bottom: 9px; }
+  .ai-badge { font-size: 8px; font-weight: 700; color: #16a34a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+  .ai-text { font-size: 9px; color: #166534; line-height: 1.4; }
+
+  .screen-content { font-size: 11px; color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<h1>QOA — Wireframes v1</h1>
+
+<!-- FLOW 1: ONBOARDING -->
+<div class="flow-title">Flow 1 — Business Onboarding</div>
+<div class="flow-row">
+
+  <div class="mobile">
+    <div class="flow-label">1. Entry</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div class="ob-logo">QOA</div><div class="ob-sub">QR Ordering for your business</div></div>
+        <div class="ob-body">
+          <div class="qr-scan-area"><div style="font-size:30px;">⬛</div><div style="font-size:9px;color:#888;">Scan to get started</div></div>
+          <div style="text-align:center;font-size:9px;color:#aaa;margin:8px 0;">— or —</div>
+          <div class="ob-field"><div class="ob-label">Your business URL</div><div class="ob-input" style="color:#aaa;font-size:9px;">qoa.app/join/yourbusiness</div></div>
+          <button class="btn-primary">Get Started Free</button>
+          <button class="btn-secondary">See how it works</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="mobile">
+    <div class="flow-label">2. Business Info</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div class="ob-logo">QOA</div></div>
+        <div class="ob-body">
+          <div class="ob-step-indicator"><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+          <div class="ob-title">Tell us about your business</div>
+          <div class="ob-desc">This is what customers see when they scan your QR code.</div>
+          <div class="ob-field"><div class="ob-label">Business Name</div><div class="ob-input focused">Japantown Boba Co.</div></div>
+          <div class="ob-field"><div class="ob-label">Type</div><div class="ob-input" style="color:#aaa;">Food Truck ▾</div></div>
+          <div class="ob-field"><div class="ob-label">Your URL</div><div class="ob-input" style="font-size:9px;color:#aaa;">qoa.app/<strong style="color:#18181b">japantown-boba</strong></div></div>
+          <button class="btn-primary">Continue →</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="mobile">
+    <div class="flow-label">3. Logo / Photo</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div class="ob-logo">QOA</div></div>
+        <div class="ob-body">
+          <div class="ob-step-indicator"><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+          <div class="ob-title">Add a photo</div>
+          <div class="ob-desc">Becomes your QR page header and home screen icon.</div>
+          <div class="photo-upload" style="height:80px;">
+            <div style="font-size:22px;">📷</div>
+            <div class="photo-text">Take a photo or upload your logo</div>
+          </div>
+          <button class="btn-primary">Take Photo</button>
+          <button class="btn-secondary">Upload from Library</button>
+          <button class="btn-secondary" style="color:#aaa;border-color:transparent;">Skip for now</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="mobile">
+    <div class="flow-label">4. Payout Setup</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div class="ob-logo">QOA</div></div>
+        <div class="ob-body">
+          <div class="ob-step-indicator"><div class="ob-dot"></div><div class="ob-dot"></div><div class="ob-dot active"></div><div class="ob-dot"></div></div>
+          <div class="ob-title">Where do we send your money?</div>
+          <div class="ob-desc">Deposits automatically every night. Cash out anytime.</div>
+          <div class="ob-field"><div class="ob-label">Bank or Debit Card</div><div class="ob-input" style="color:#aaa;">Connect via Stripe ›</div></div>
+          <div style="background:#fafafa;border:1px solid #e0e0e0;border-radius:8px;padding:9px;margin-bottom:10px;"><div style="font-size:8px;color:#888;line-height:1.5;">1.5% per transaction. No monthly fees. No hardware. Auto-deposits at 11pm nightly.</div></div>
+          <button class="btn-primary">Connect Payout →</button>
+          <button class="btn-secondary">Set up later</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <div class="mobile">
+    <div class="flow-label">5. You're Live</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header" style="padding:18px 14px;">
+          <div style="font-size:26px;margin-bottom:5px;">🎉</div>
+          <div class="ob-logo" style="font-size:15px;">You're live!</div>
+          <div class="ob-sub">Japantown Boba Co.</div>
+        </div>
+        <div class="ob-body">
+          <div style="background:#f0f0f0;border-radius:10px;width:90px;height:90px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888;">QR Code</div>
+          <div style="text-align:center;font-size:9px;color:#888;margin-bottom:10px;">qoa.app/japantown-boba</div>
+          <button class="btn-primary">Download QR Code</button>
+          <button class="btn-secondary">Build Your Menu →</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FLOW 2: ADMIN MENU BUILDER -->
+<div class="flow-title">Flow 2 — Admin: Menu Builder</div>
+<div class="flow-label" style="margin-bottom:8px;">Desktop — qoa.app/admin/menu</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/menu</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Japantown Boba Co.</div>
+        <div class="nav-item">📋 Orders</div>
+        <div class="nav-item active">🍽️ Menu</div>
+        <div class="nav-item">💰 Payouts</div>
+        <div class="nav-item">📊 Analytics</div>
+        <div class="nav-item">⚙️ Settings</div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Menu Builder</div>
+        <div class="admin-page-sub">Add items by photo, manually, or upload your existing menu.</div>
+        <div class="menu-add-options">
+          <div class="add-option"><div class="opt-icon">📷</div><div class="opt-title">Take a Photo</div><div class="opt-desc">AI analyzes and suggests name + description</div></div>
+          <div class="add-option"><div class="opt-icon">✏️</div><div class="opt-title">Type It In</div><div class="opt-desc">Add name, description, and price manually</div></div>
+          <div class="add-option"><div class="opt-icon">📄</div><div class="opt-title">Upload Menu</div><div class="opt-desc">PDF, image, or spreadsheet. AI builds your item list.</div></div>
+        </div>
+        <div style="margin-bottom:14px;">
+          <div class="menu-section-title">Drinks</div>
+          <div class="menu-item-row">
+            <div class="menu-item-thumb">🧋</div>
+            <div style="flex:1;"><div class="menu-item-name">Taro Milk Tea</div><div class="menu-item-desc">Creamy taro with your choice of milk and sweetness level</div></div>
+            <div class="menu-item-price">$6.50</div>
+            <div class="toggle-on"></div>
+            <div class="edit-btn">Edit</div>
+          </div>
+          <div class="menu-item-row">
+            <div class="menu-item-thumb">🍵</div>
+            <div style="flex:1;"><div class="menu-item-name">Matcha Latte</div><div class="menu-item-desc">Ceremonial grade matcha, oat milk, light sweetness</div></div>
+            <div class="menu-item-price">$7.00</div>
+            <div class="toggle-on"></div>
+            <div class="edit-btn">Edit</div>
+          </div>
+        </div>
+        <div>
+          <div class="menu-section-title">Food</div>
+          <div class="menu-item-row">
+            <div class="menu-item-thumb" style="font-size:9px;color:#aaa;">No img</div>
+            <div style="flex:1;"><div class="menu-item-name">Onigiri — Salmon</div><div class="menu-item-desc">Rice triangle with seasoned salmon, wrapped in nori</div></div>
+            <div class="menu-item-price">$4.50</div>
+            <div class="toggle-off"></div>
+            <div class="edit-btn">Edit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOW 3: ADD ITEM PATHS -->
+<div class="flow-title">Flow 3 — Add Item (3 paths)</div>
+<div class="flow-row">
+
+  <div class="mobile">
+    <div class="flow-label">A. Photo → AI</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div style="font-size:10px;color:#666;">← Menu</div><div class="ob-logo" style="font-size:13px;margin-top:3px;">Add Item</div></div>
+        <div class="ob-body">
+          <div style="background:#111;border-radius:8px;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px;position:relative;">
+            <div style="font-size:26px;">📷</div>
+            <div style="font-size:8px;color:#555;">Camera preview</div>
+            <div style="position:absolute;bottom:6px;right:8px;background:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;">⚪</div>
+          </div>
+          <div class="ai-suggestion">
+            <div class="ai-badge">✨ AI Suggestion</div>
+            <div class="ai-text"><strong>Taro Milk Tea</strong><br/>Creamy taro base with chewy tapioca pearls. Customize sweetness and ice.</div>
+          </div>
+          <div class="ob-field"><div class="ob-label">Name</div><div class="ob-input focused">Taro Milk Tea</div></div>
+          <div class="ob-field"><div class="ob-label">Price</div><div class="ob-input">$6.50</div></div>
+          <button class="btn-primary">Save Item</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div style="width:12px;"></div>
+
+  <div class="mobile">
+    <div class="flow-label">B. Type It In</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div style="font-size:10px;color:#666;">← Menu</div><div class="ob-logo" style="font-size:13px;margin-top:3px;">Add Item</div></div>
+        <div class="ob-body">
+          <div class="ob-field"><div class="ob-label">Item Name</div><div class="ob-input focused">Matcha Lemonade</div></div>
+          <div class="ob-field"><div class="ob-label">Description</div><div class="ob-input" style="height:48px;padding-top:5px;">Ceremonial matcha, fresh lemon, lightly sweetened</div></div>
+          <div class="ob-field"><div class="ob-label">Price</div><div class="ob-input">$6.00</div></div>
+          <div class="ob-field"><div class="ob-label">Category</div><div class="ob-input" style="color:#aaa;">Drinks ▾</div></div>
+          <div class="photo-upload" style="padding:8px;margin-bottom:8px;"><div style="font-size:13px;">＋ 📷</div><div class="photo-text">Add photo (optional)</div></div>
+          <button class="btn-primary">Save Item</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div style="width:12px;"></div>
+
+  <div class="mobile">
+    <div class="flow-label">C. Upload → AI Review</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="ob-header"><div style="font-size:10px;color:#666;">← Menu</div><div class="ob-logo" style="font-size:13px;margin-top:3px;">Upload Menu</div></div>
+        <div class="ob-body">
+          <div class="ob-desc">Upload your menu. AI reads it and builds your item list. You review each item before saving.</div>
+          <div class="photo-upload" style="height:70px;border-color:#18181b;margin-bottom:10px;">
+            <div style="font-size:18px;">📄</div>
+            <div class="photo-text">PDF, image, Excel, Word</div>
+          </div>
+          <div style="background:#f9f9f9;border-radius:8px;padding:10px;margin-bottom:10px;">
+            <div style="font-size:10px;font-weight:700;color:#18181b;margin-bottom:6px;">✅ AI found 8 items</div>
+            <div style="font-size:9px;color:#666;display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee;"><span>Taro Milk Tea</span><span style="color:#16a34a;">$6.50 ✓</span></div>
+            <div style="font-size:9px;color:#666;display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #eee;"><span>Matcha Latte</span><span style="color:#16a34a;">$7.00 ✓</span></div>
+            <div style="font-size:9px;color:#f59e0b;display:flex;justify-content:space-between;padding:4px 0;"><span>Brown Sugar Boba</span><span>Price? ⚠️</span></div>
+          </div>
+          <button class="btn-primary">Review &amp; Confirm All</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

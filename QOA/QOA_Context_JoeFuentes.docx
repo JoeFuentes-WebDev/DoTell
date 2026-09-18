@@ -1,0 +1,318 @@
+**QOA — QR Ordering App**
+
+Context Document v2  |  May 25, 2026
+
+# **What Is QOA**
+
+QR-based ordering and loyalty platform for small restaurants, food trucks, boba shops, pop-ups, food court vendors, delis, candle stores, and any quick-service operation that currently uses paper numbers, name call-outs, or buzzer pagers to manage order pickup.
+
+Owner sets up a digital menu in minutes using AI-assisted photo analysis. Customers scan a QR code, browse the menu, order, pay, and get a text when their order is ready. No app download. No hardware. No paper numbers.
+
+The name is abstract and works on two levels: functional (QR Ordering App) for owners evaluating it, and brand-ready (QOA) for marketing. Subject to change.
+
+# **The Real Problems It Solves**
+
+## **For the Customer**
+
+The paper number system is broken everywhere. Customer gets a number, vendor calls it out over noise, customer is on their phone, misses it, food gets cold. QOA replaces that with a text notification directly to the customer's phone. They look up, walk over, done.
+
+Origin story: Japantown boba shop. Paper receipt with a number. Teenagers on their phones groupchatting. 10-minute wait, missed the call, cold boba. QOA fixes that specific moment.
+
+For repeat customers at their regular spots, QOA functions as a loyalty app. Not any restaurant, their taco truck, their deli, their coffee cart. Saved to home screen, looks like an app, personal and familiar.
+
+## **For the Owner**
+
+Line management, payment handling, and order communication all simplified. Customer orders and pays before reaching the counter. Owner fulfills. No card reader to maintain, no change to make, no calling out names, no lost buzzers.
+
+"They order. They pay. You just cook." That is the operational pitch.
+
+# **Market**
+
+Any quick-service operation currently using paper numbers, name call-outs, or buzzer pagers. Broader than initially scoped.
+
+- Food trucks
+
+- Boba and bubble tea shops
+
+- Food court vendors
+
+- Farmers market vendors
+
+- Pop-ups and temporary stalls
+
+- Delis and sandwich counters
+
+- Small grab-and-go retail (candle stores, boutiques)
+
+- Any small to midsize quick-service restaurant
+
+# **Business Model**
+
+Free with 1.5% transaction fee. No monthly subscription. No hardware cost. Deliberately undercuts Square (2.6% + 10 cents) to drive adoption. Fee may increase as product matures and value is proven. Early adopters grandfathered at 1.5%.
+
+Freemium or tiered pricing (base fee plus premium features) is a future consideration. Not at launch.
+
+Fast transfer (instant payout to debit card) offered for small additional fee as optional revenue stream.
+
+# **The Skip the Line Feature**
+
+Customer opens QOA at the taco truck, picks their order, pays, walks up when their name is called. Skips the ordering line entirely. By the time they reach the counter the food is being made.
+
+This is the customer acquisition mechanic. Someone sees a person walk up, skip 8 people, grab their food and leave. They ask how. The answer is the QR code on the truck. Organic adoption with zero marketing spend.
+
+# **Order Status and Notification Flow**
+
+Real-time order status prevents the expectation gap. Customer sees "your order is being prepared" vs "your order is ready." No hovering at the counter, no awkward "is mine done yet" conversation.
+
+- Owner sets estimated wait time ("orders taking about 15 minutes right now")
+
+- Owner queue shows all pending orders
+
+- One-tap "order ready" button on owner queue
+
+- Customer phone buzzes: "Joe, your order is ready. Come pick it up."
+
+- Customer walks up, grabs food, leaves
+
+This makes the owner look more professional than their current setup regardless of size.
+
+# **SMS Capture Funnel**
+
+The order-ready notification is the natural and frictionless phone number capture moment. Not "give us your number for marketing." Just "where should we text you when your order is ready?" Every customer wants that. Nobody wants to stand there staring at a counter.
+
+This works even for pay-at-counter customers. No transaction fee captured, but phone number captured anyway. They are now in the retention and nudge funnel.
+
+The phone number becomes the loyalty identifier regardless of payment method.
+
+# **Retention and Engagement Features**
+
+## **Nudges and Promos**
+
+- Long-time-no-see nudge: system detects regular has not visited in X weeks, sends personalized SMS automatically. Owner does nothing.
+
+- Today's special push to saved customers
+
+- Slow day detection: no orders in N hours, agent drafts a promo notification for owner one-tap approval
+
+## **Loyalty Program**
+
+Buy-10-get-1-free built in. No paper punch cards, no tracking, fully automatic. Owner toggles it on and sets the reward. Customer sees progress indicator in the app. "7 of 10 toward your free taco." Resets automatically after redemption.
+
+Per restaurant. Taco truck stamp card is separate from deli stamp card. Each spot has its own loyalty counter.
+
+This is a loyalty program capability that Square does not offer small vendors out of the box and Toast charges extra for. QOA bundles it at no additional cost.
+
+## **Analytics**
+
+- Order history per customer
+
+- Peak hour visibility
+
+- Best selling items
+
+- Repeat customer rate
+
+Owner has data they never had before without any effort on their part.
+
+# **Payout Architecture**
+
+## **The Trust Mechanic**
+
+Owner dashboard shows: Available Balance $247.50 with a [Cash Out Now] button. Small print: "Balance transfers automatically at 11pm."
+
+The button is the trust builder. First few days owners tap it to verify it works. Money hits their bank. By week two they stop tapping and let the automatic sweep run. The button stays visible so they never feel locked out.
+
+## **Technical Flow**
+
+- Customer pays full transaction to QOA Stripe account
+
+- Backend calculates 98.5% owner share, updates balance in real time
+
+- Owner taps Cash Out anytime for on-demand payout
+
+- 11pm scheduled job sweeps all non-zero balances not already cashed out
+
+- Payout via Stripe to owner registered bank or debit card
+
+# **Two Surfaces**
+
+## **Owner Side**
+
+- Registration: store name, optional photo, bank/debit for payouts
+
+- AI-assisted menu management (photo upload, AI suggests name/description, owner sets price)
+
+- QR code generated on registration
+
+- Order queue with one-tap ready notification
+
+- Balance dashboard with Cash Out button
+
+- Loyalty program configuration
+
+- Estimated wait time setting
+
+- Analytics dashboard
+
+## **Diner Side**
+
+- PWA per restaurant, no app store required
+
+- Scan QR, land on that restaurant branded experience
+
+- Save to home screen with restaurant name and photo as icon
+
+- Browse menu, order, pay or defer to pickup
+
+- Phone number entry for order ready notification
+
+- Real-time order status
+
+- Loyalty progress indicator
+
+- Repeat order from history
+
+- Receipt via SMS or email
+
+QOA is invisible infrastructure. The brand the diner sees is the restaurant brand.
+
+# **Agentic Layer**
+
+- Long-time-no-see nudge: scheduled agent monitors visit cadence, fires when threshold crossed, composes SMS, sends
+
+- Slow day detection: monitors order velocity, detects anomaly, drafts promo for owner one-tap approval
+
+- 11pm payout sweep: financial agent, processes all eligible balances nightly
+
+CivicPulse is the learning lab for these agentic patterns. QOA is where they get applied to a commercially motivated product.
+
+# **Distribution Strategy**
+
+## **Owner Acquisition: Postcard**
+
+Physical postcard with two QR codes. One opens qoa.app/admin directly (no download, just start). One opens the marketing website (qoa.com or equivalent) for owners who want to read more before committing.
+
+The postcard plants the seed. The website closes. The skeptic picks up the card, thinks about it, visits the site when ready, scans when convinced. No pressure, no commitment required at any step.
+
+Owner headlines: "They order. They pay. You just cook." Supporting copy covers: skip the line, order ready notifications, automatic payouts, loyalty program built in.
+
+## **Customer Acquisition: The Truck**
+
+QR code on the truck, the counter, the window. Customer sees someone skip the line, asks how, gets shown the QR code. Organic adoption. No marketing spend required on the customer side.
+
+# **Tech Stack**
+
+- Next.js App Router + TypeScript
+
+- Tailwind CSS
+
+- Prisma + Neon (Postgres)
+
+- Cloudinary (menu item images)
+
+- Anthropic Claude Vision API (AI menu analysis)
+
+- Stripe (payments and payouts)
+
+- Twilio (SMS notifications, ~1 cent per message)
+
+- PWA with dynamic manifest per restaurant
+
+- Web Push API (push notifications as secondary channel)
+
+Reusing Laura's Pots stack as foundation. Estimated 30-40% of the work already solved.
+
+# **Build Timeline**
+
+- MVP: scan, browse, order, pay, owner queue, order ready SMS -- 3-5 days
+
+- V1: PWA save to homescreen, receipt capture, payout flow, wait time -- 3-5 days
+
+- V2: loyalty program, long-time-no-see agent, slow day agent, analytics -- 3-5 days
+
+- Business track (LLC, Stripe Connect, ToS): follows traction, not precedes it
+
+# **Launch Strategy**
+
+Go commercial without full business track. Stripe standard routes all payments to Joe personal account. Automated 11pm sweep handles owner payouts. No LLC required to start.
+
+Migrate to Stripe Connect when volume makes it necessary. Form LLC when commercial viability is proven.
+
+# **Open Questions**
+
+- Domain: qoa.app, getqoa.com -- check availability
+
+- App name: QOA is working name, subject to change
+
+- Order-ahead with estimated pickup time: V1 or V2?
+
+- Multi-location support: how early to design for in schema?
+
+- Buy-10-get-1 threshold: owner configurable or fixed?
+
+- Loyalty identifier: phone number only or email too?
+
+- Postcard copy: needs full draft and design
+
+- Marketing website: scope and content
+
+# **Next Steps**
+
+- Check domain availability for qoa.app and getqoa.com
+
+- Finish CivicPulse Phase 1 agentic bootcamp
+
+- Scope QOA database schema: Restaurant, MenuItem, Order, Customer, Balance, Payout, LoyaltyCard
+
+- Draft postcard copy and layout
+
+- Build QOA MVP
+
+- Update portfolio site to include QOA once MVP is live
+# **Order Queue — UX Decisions (May 28, 2026)**
+
+## Desktop: Kanban Board
+
+Replaced the tab-per-status layout with a Jira-style 4-lane kanban board. All orders visible simultaneously across all statuses -- no tab switching during a rush.
+
+**Lanes:** New / In Progress / Ready / Picked Up
+
+**Card format:** `#42 · Sandy · Chocolate Ice Cream` -- order number, customer name, first item (truncated if multiple). Time elapsed shown below. Color-coded by lane.
+
+**Two buttons per card:**
+- **View** -- opens modal with full order detail (all items, special request, total, time)
+- **Move →** -- advances to next status immediately, no modal, no confirmation. Label changes per lane: "Start →" / "Ready →" / "Picked Up →"
+
+**Picked Up lane:** View only. No Move button. Cards dimmed.
+
+**Modal:** Full item list, special request, total, SMS confirmation status. Action button advances status. Cancel order button on New and In Progress modals only. Back-step available: Ready → In Progress only (not back to New).
+
+**One-tap Pause** always visible in page header. **Walk-up (＋)** button always visible for manual orders.
+
+## Mobile: Tab Strip + Inline Expand
+
+Tab strip (New / In Progress / Ready / Picked Up) with live badge counts. New tab badge is red, In Progress is amber, Ready is green.
+
+**Card format:** Order number (large) + name only. No item detail on collapsed card.
+
+**Single tap** -- expands card inline with full order detail + action button to advance. Other cards remain visible and scrollable above and below.
+
+**Double-tap** -- advances to next status directly, no modal, no confirmation. Fast path for experienced owners during rush.
+
+**New order banner** pulses at top when a new order arrives. Push notification fires to locked screen with order number, name, items, total.
+
+## Wireframe Reference
+
+QOA_Queue_Wireframe.html -- separate focused file covering desktop kanban and 4 mobile states.
+
+# **Open UX Questions — Queue**
+
+- Queue UX is functional but not yet fully optimized. Need to continue exploring flows that minimize taps and clicks for high-volume rush scenarios. Ideas to explore: swipe gestures on mobile cards to advance status, keyboard shortcuts on desktop, batch-advance (select multiple New orders and start all at once), audio cue differentiation by status (different sounds for New vs Ready pickup).
+
+- Double-tap on mobile for status advance: needs usability validation. Could be hard to discover. Consider a brief onboarding tooltip or a "quick actions" long-press menu as alternative.
+
+- Should the kanban board auto-scroll or highlight cards that have been waiting too long (e.g., card border pulses red after N minutes in New)?
+
+- Picked Up lane: show last N orders only, or collapse to a count? Infinite scroll adds clutter.
+
+- Walk-up orders on mobile: currently only accessible from desktop header. Needs a mobile entry point.

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmGoing — Wireframes v1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F0F0F0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px 20px; }
+  
+  h1.doc-title { font-size: 28px; font-weight: 600; color: #111; margin-bottom: 6px; }
+  p.doc-sub { font-size: 14px; color: #888; margin-bottom: 40px; }
+
+  .section { margin-bottom: 60px; }
+  .section-title { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #DDD; }
+
+  .screens-row { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .screen-label { font-size: 11px; font-weight: 500; color: #999; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* PHONE SHELL */
+  .phone { background: #1A1A1A; border-radius: 44px; padding: 12px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+  .phone-inner { background: #F8F8F8; border-radius: 34px; overflow: hidden; min-height: 560px; display: flex; flex-direction: column; }
+  .status { display: flex; justify-content: space-between; padding: 10px 16px 4px; font-size: 11px; color: #999; background: #F8F8F8; }
+
+  /* APP CHROME */
+  .app-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 14px 10px; background: #F8F8F8; }
+  .app-title { font-size: 17px; font-weight: 600; color: #111; }
+  .header-icons { display: flex; gap: 14px; color: #888; font-size: 16px; }
+
+  /* DATE BAR */
+  .date-bar { display: flex; margin: 0 10px 10px; background: white; border: 1px solid #E8E8E8; border-radius: 10px; overflow: hidden; }
+  .date-pill { flex: 1; padding: 7px 10px; border-right: 1px solid #E8E8E8; }
+  .loc-pill { flex: 1; padding: 7px 10px; }
+  .pill-lbl { font-size: 9px; color: #AAA; margin-bottom: 1px; }
+  .pill-val { font-size: 12px; font-weight: 500; color: #222; }
+  .pill-val.blue { color: #2B6CB0; }
+
+  /* FEED */
+  .feed { margin: 0 10px; display: flex; flex-direction: column; gap: 1px; background: #E0E0E0; border-radius: 10px; overflow: hidden; }
+  .card { background: white; padding: 10px 12px; }
+  .card.expanded { background: #F5F5F5; }
+  .card-r1 { display: flex; align-items: center; gap: 7px; margin-bottom: 2px; }
+  .card-icon { font-size: 13px; color: #888; flex-shrink: 0; width: 18px; }
+  .card-name { font-size: 13px; font-weight: 500; color: #111; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card-r2 { font-size: 11px; color: #666; padding-left: 25px; margin-bottom: 6px; }
+  .action-row { display: flex; gap: 5px; padding-left: 25px; }
+  .act { flex: 1; text-align: center; padding: 5px 2px; border-radius: 7px; border: 1px solid #DDD; font-size: 10px; font-weight: 500; color: #555; background: white; cursor: pointer; }
+  .act.going { background: #EBF8F2; color: #1A7A52; border-color: #7DD4B0; }
+  .act.less { background: #FEF2F2; color: #C0392B; border-color: #F5A5A5; }
+  .act.int { background: #EBF4FF; color: #2B6CB0; border-color: #90CDF4; }
+
+  /* EXPANDED CONTENT */
+  .exp { border-top: 1px solid #E8E8E8; padding-top: 10px; margin-top: 8px; }
+  .venue-hero { width: 100%; height: 60px; background: #1A7A52; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .venue-hero span { font-size: 20px; color: rgba(255,255,255,0.5); }
+  .badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; color: #1A7A52; background: #EBF8F2; border: 1px solid #7DD4B0; border-radius: 5px; padding: 2px 6px; margin-bottom: 7px; }
+  .venue-meta { display: flex; justify-content: space-between; margin-bottom: 7px; }
+  .venue-details { font-size: 10px; color: #888; line-height: 1.5; }
+  .venue-links { display: flex; gap: 6px; }
+  .vlink { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #DDD; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #888; }
+  .bio { font-size: 10px; color: #666; line-height: 1.5; margin-bottom: 10px; }
+  .m-pills { display: flex; gap: 5px; margin-bottom: 8px; }
+  .m-pill { flex: 1; text-align: center; padding: 5px; border-radius: 7px; border: 1px solid #DDD; font-size: 10px; font-weight: 500; cursor: pointer; }
+  .m-pill.int { color: #2B6CB0; border-color: #90CDF4; background: #EBF4FF; }
+  .m-pill.go { color: #1A7A52; border-color: #7DD4B0; background: #EBF8F2; }
+  .m-pill.here { color: #9B2335; border-color: #F5A5A5; background: #FEF2F2; }
+
+  /* OVERLAY */
+  .overlay-dim { opacity: 0.3; pointer-events: none; }
+  .overlay { background: white; border-radius: 12px 12px 0 0; border: 1px solid #E0E0E0; border-bottom: none; padding: 0 12px 14px; margin-top: 8px; }
+  .ov-handle { width: 28px; height: 3px; background: #DDD; border-radius: 2px; margin: 8px auto 12px; }
+  .ov-title { font-size: 13px; font-weight: 600; color: #111; display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .ov-x { color: #AAA; font-size: 14px; }
+  .person-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F0F0F0; }
+  .person-row:last-child { border-bottom: none; }
+  .av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; flex-shrink: 0; }
+  .av-g { background: #EBF8F2; color: #1A7A52; }
+  .av-h { background: #FEF2F2; color: #9B2335; }
+  .av-a { background: #EEE; color: #AAA; }
+  .person-name { font-size: 12px; font-weight: 500; color: #111; }
+  .person-note { font-size: 10px; color: #AAA; font-style: italic; }
+
+  /* DATE SECTION HEADERS */
+  .date-hdr { background: #F0F0F0; padding: 6px 12px; display: flex; justify-content: space-between; }
+  .date-hdr-lbl { font-size: 11px; font-weight: 500; color: #666; }
+  .date-hdr-count { font-size: 10px; color: #AAA; }
+
+  /* HERETOO BANNER */
+  .banner { background: white; border: 1px solid #E0E0E0; border-radius: 10px; margin: 0 10px 10px; padding: 10px 12px; }
+  .banner-r1 { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .b-dot { width: 7px; height: 7px; border-radius: 50%; background: #C0392B; flex-shrink: 0; }
+  .b-text { font-size: 12px; font-weight: 500; color: #111; flex: 1; }
+  .b-link { color: #2B6CB0; text-decoration: underline; }
+  .b-x { font-size: 14px; color: #AAA; }
+  .banner-r2 { display: flex; gap: 6px; }
+  .b-input { flex: 1; border: 1px solid #DDD; border-radius: 7px; padding: 6px 8px; font-size: 11px; color: #AAA; background: #F8F8F8; }
+  .b-post { font-size: 11px; font-weight: 500; color: #2B6CB0; background: #EBF4FF; border: 1px solid #90CDF4; border-radius: 7px; padding: 6px 10px; white-space: nowrap; }
+
+  /* NOTE COMPOSER */
+  .note-overlay { background: white; border-radius: 12px 12px 0 0; border: 1px solid #E0E0E0; padding: 0 12px 14px; margin-top: 8px; }
+  .note-event { background: #F5F5F5; border-radius: 7px; padding: 7px 9px; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+  .note-event-icon { font-size: 13px; color: #888; }
+  .note-event-name { font-size: 11px; font-weight: 500; color: #222; }
+  .note-event-sub { font-size: 10px; color: #AAA; }
+  .note-input { width: 100%; border: 1px solid #DDD; border-radius: 7px; padding: 7px 9px; font-size: 12px; color: #AAA; background: #F8F8F8; font-family: inherit; resize: none; margin-bottom: 4px; }
+  .char-cnt { font-size: 10px; color: #AAA; text-align: right; margin-bottom: 10px; }
+  .note-btns { display: flex; gap: 7px; }
+  .note-post { flex: 1; text-align: center; padding: 8px; border-radius: 7px; font-size: 12px; font-weight: 500; }
+  .note-post.go { background: #EBF8F2; color: #1A7A52; border: 1px solid #7DD4B0; }
+  .note-post.here { background: #FEF2F2; color: #9B2335; border: 1px solid #F5A5A5; }
+  .note-skip { flex: 1; text-align: center; padding: 8px; border-radius: 7px; font-size: 12px; background: #F5F5F5; color: #888; border: 1px solid #E0E0E0; }
+
+  /* NOTIFICATION CENTER */
+  .notif-list { margin: 0 10px; display: flex; flex-direction: column; gap: 1px; background: #E0E0E0; border-radius: 10px; overflow: hidden; }
+  .notif-row { background: white; padding: 9px 12px; display: flex; align-items: flex-start; gap: 9px; }
+  .notif-row.unread { background: #F8F8F8; }
+  .n-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+  .nd-ht { background: #C0392B; }
+  .nd-go { background: #1A7A52; }
+  .nd-int { background: #2B6CB0; }
+  .nd-read { background: transparent; border: 1px solid #DDD; }
+  .n-body { flex: 1; }
+  .n-text { font-size: 12px; color: #111; margin-bottom: 1px; }
+  .n-text strong { font-weight: 600; }
+  .n-venue { font-size: 10px; color: #888; margin-bottom: 1px; }
+  .n-note { font-size: 10px; color: #AAA; font-style: italic; }
+  .n-time { font-size: 10px; color: #AAA; flex-shrink: 0; }
+  .n-sec { padding: 7px 12px 4px; font-size: 9px; font-weight: 600; color: #AAA; text-transform: uppercase; letter-spacing: 0.05em; background: #F5F5F5; }
+
+  /* SETTINGS */
+  .settings-section { margin: 0 10px 8px; background: white; border-radius: 10px; border: 1px solid #E8E8E8; overflow: hidden; }
+  .settings-section-lbl { font-size: 9px; font-weight: 600; color: #AAA; text-transform: uppercase; letter-spacing: 0.05em; padding: 8px 12px 4px; }
+  .settings-desc { font-size: 10px; color: #AAA; padding: 0 12px 6px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 12px 10px; }
+  .tag { font-size: 10px; padding: 3px 9px; border-radius: 99px; border: 1px solid #DDD; color: #666; background: #F5F5F5; }
+  .tag.obs { border-color: #7DD4B0; color: #1A7A52; background: #EBF8F2; }
+  .tag.dec { border-color: #90CDF4; color: #2B6CB0; background: #EBF4FF; }
+  .tag.add { border-style: dashed; color: #AAA; }
+  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-top: 1px solid #F0F0F0; }
+  .settings-row:first-of-type { border-top: none; }
+  .sr-left { flex: 1; }
+  .sr-lbl { font-size: 12px; color: #222; }
+  .sr-sub { font-size: 10px; color: #AAA; }
+  .toggle { width: 32px; height: 18px; border-radius: 99px; position: relative; flex-shrink: 0; }
+  .toggle.on { background: #1A7A52; }
+  .toggle.off { background: #CCC; }
+  .toggle-thumb { width: 14px; height: 14px; border-radius: 50%; background: white; position: absolute; top: 2px; }
+  .toggle.on .toggle-thumb { left: 16px; }
+  .toggle.off .toggle-thumb { left: 2px; }
+  .roadmap { font-size: 9px; color: #AAA; border: 1px solid #DDD; border-radius: 4px; padding: 1px 5px; }
+
+  /* ONBOARDING */
+  .onb-slide { flex: 1; display: flex; flex-direction: column; }
+  .onb-visual { height: 160px; display: flex; align-items: center; justify-content: center; }
+  .onb-icon { font-size: 44px; }
+  .onb-body { padding: 16px 16px 12px; flex: 1; }
+  .onb-title { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 6px; }
+  .onb-desc { font-size: 12px; color: #666; line-height: 1.5; margin-bottom: 14px; }
+  .onb-dots { display: flex; justify-content: center; gap: 5px; margin-bottom: 10px; }
+  .onb-dot { width: 5px; height: 5px; border-radius: 50%; background: #DDD; }
+  .onb-dot.active { background: #1A7A52; width: 14px; border-radius: 3px; }
+  .onb-nav { display: flex; justify-content: space-between; padding: 0 16px 16px; }
+  .onb-skip { font-size: 12px; color: #AAA; }
+  .onb-next { font-size: 12px; font-weight: 500; color: #1A7A52; }
+
+  /* EMPTY STATE */
+  .empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+  .empty-icon { font-size: 32px; color: #CCC; margin-bottom: 12px; }
+  .empty-title { font-size: 14px; font-weight: 500; color: #666; margin-bottom: 6px; }
+  .empty-sub { font-size: 11px; color: #AAA; line-height: 1.5; }
+
+  /* PROFILE ROW IN SETTINGS */
+  .profile-row { display: flex; align-items: center; gap: 12px; padding: 12px; }
+  .profile-av { width: 44px; height: 44px; border-radius: 50%; background: #EBF4FF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #2B6CB0; flex-shrink: 0; }
+  .profile-name { font-size: 14px; font-weight: 500; color: #111; }
+  .profile-edit { font-size: 11px; color: #2B6CB0; }
+</style>
+</head>
+<body>
+
+<h1 class="doc-title">AmGoing — Wireframes</h1>
+<p class="doc-sub">Version 1.0 · June 8, 2026 · All screens at wireframe fidelity</p>
+
+<!-- SECTION 1: FEED -->
+<div class="section">
+  <div class="section-title">Feed Screen</div>
+  <div class="screens-row">
+
+    <!-- COLLAPSED FEED -->
+    <div class="screen-wrap">
+      <div class="screen-label">1. Feed — Collapsed</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="date-bar">
+          <div class="date-pill"><div class="pill-lbl">When</div><div class="pill-val">Today · June 9</div></div>
+          <div class="loc-pill"><div class="pill-lbl">Where</div><div class="pill-val">Hayes Valley</div></div>
+        </div>
+        <div class="feed">
+          <div class="card">
+            <div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St, SF</span></div>
+            <div class="card-r2">7pm Set · Julius Flemings Quartet</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+          </div>
+          <div class="card">
+            <div class="card-r1"><span class="card-icon">😂</span><span class="card-name">SF Comedy College · Mission</span></div>
+            <div class="card-r2">8pm · Open Mic Night</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+          </div>
+          <div class="card">
+            <div class="card-r1"><span class="card-icon">🏛</span><span class="card-name">SFMOMA · 3rd St, SF 94103</span></div>
+            <div class="card-r2">Free Thursday · Until 9pm</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+          </div>
+          <div class="card">
+            <div class="card-r1"><span class="card-icon">🎾</span><span class="card-name">Marina Courts · Baker St</span></div>
+            <div class="card-r2">Open Pickleball · Now</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+          </div>
+          <div class="date-hdr"><span class="date-hdr-lbl">Tomorrow · June 10</span><span class="date-hdr-count">14 events ▾</span></div>
+          <div class="date-hdr"><span class="date-hdr-lbl">Wednesday · June 11</span><span class="date-hdr-count">9 events ▾</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- EXPANDED CARD -->
+    <div class="screen-wrap">
+      <div class="screen-label">2. Feed — Expanded Card</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="date-bar">
+          <div class="date-pill"><div class="pill-lbl">When</div><div class="pill-val">Today · June 9</div></div>
+          <div class="loc-pill"><div class="pill-lbl">Where</div><div class="pill-val">Hayes Valley</div></div>
+        </div>
+        <div class="feed">
+          <div class="card expanded">
+            <div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St, SF</span></div>
+            <div class="card-r2">7pm Set · Julius Flemings Quartet</div>
+            <div class="action-row"><div class="act int">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+            <div class="exp">
+              <div class="venue-hero"><span>🎷</span></div>
+              <div class="badge">✓ AmGoing Partner</div>
+              <div class="venue-meta">
+                <div class="venue-details">📍 39 Fell St · 0.25 mi<br>🕐 Open until 2am</div>
+                <div class="venue-links"><div class="vlink">🌐</div><div class="vlink">📍</div></div>
+              </div>
+              <div class="bio">One of SF's most intimate jazz rooms. The Julius Flemings Quartet brings hard bop and post-bop to a space where every seat is close to the stage.</div>
+              <div class="m-pills">
+                <div class="m-pill int">12 interested</div>
+                <div class="m-pill go">3 going</div>
+                <div class="m-pill here">2 here</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-r1"><span class="card-icon">🏛</span><span class="card-name">SFMOMA · 3rd St, SF</span></div>
+            <div class="card-r2">Free Thursday · Until 9pm</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less like this</div></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- MOMENTUM OVERLAY -->
+    <div class="screen-wrap">
+      <div class="screen-label">3. Momentum Overlay</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="date-bar">
+          <div class="date-pill"><div class="pill-lbl">When</div><div class="pill-val">Today · June 9</div></div>
+          <div class="loc-pill"><div class="pill-lbl">Where</div><div class="pill-val">Hayes Valley</div></div>
+        </div>
+        <div class="feed overlay-dim">
+          <div class="card expanded">
+            <div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St, SF</span></div>
+            <div class="card-r2">7pm · Julius Flemings Quartet</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less</div></div>
+            <div class="exp">
+              <div class="venue-hero"><span>🎷</span></div>
+              <div class="bio">One of SF's most intimate jazz rooms...</div>
+              <div class="m-pills">
+                <div class="m-pill int">12 interested</div>
+                <div class="m-pill go" style="border-width:2px;">3 going</div>
+                <div class="m-pill here">2 here</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="overlay">
+          <div class="ov-handle"></div>
+          <div class="ov-title"><span>Going · 3</span><span class="ov-x">✕</span></div>
+          <div class="person-row"><div class="av av-g">S</div><div><div class="person-name">Sarah</div><div class="person-note">"Usually grab a seat at the bar"</div></div></div>
+          <div class="person-row"><div class="av av-g">M</div><div><div class="person-name">Mike</div></div></div>
+          <div class="person-row"><div class="av av-a">?</div><div><div class="person-name" style="color:#AAA;">Anonymous</div></div></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 2: HERETOO -->
+<div class="section">
+  <div class="section-title">HereToo Banner</div>
+  <div class="screens-row">
+
+    <!-- BANNER COLLAPSED -->
+    <div class="screen-wrap">
+      <div class="screen-label">4. Banner — Collapsed</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>2:14</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="banner">
+          <div class="banner-r1"><div class="b-dot"></div><span class="b-text">Dan is HereToo at <span class="b-link">SFMOMA ↗</span></span><span class="b-x">✕</span></div>
+          <div class="banner-r2"><div class="b-input">... send an update</div><div class="b-post">Post →</div></div>
+        </div>
+        <div class="feed">
+          <div class="card"><div class="card-r1"><span class="card-icon">🏛</span><span class="card-name">SFMOMA · 3rd St, SF</span></div><div class="card-r2">Free Thursday · Until 9pm</div><div class="action-row"><div class="act">Interested</div><div class="act going">Am Going ✓ ✏</div><div class="act less">Less</div></div></div>
+          <div class="card"><div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St</span></div><div class="card-r2">7pm · Julius Flemings</div><div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less</div></div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- BANNER WITH STATUS -->
+    <div class="screen-wrap">
+      <div class="screen-label">5. Banner — Status Posted</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>2:15</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="banner">
+          <div class="banner-r1"><div class="b-dot"></div><span class="b-text">Dan is HereToo at <span class="b-link">SFMOMA ↗</span></span><span class="b-x">✕</span></div>
+          <div class="banner-r2"><div class="b-input" style="color:#222;">I'm at the bar</div><div class="b-post">Post →</div></div>
+        </div>
+        <div class="feed">
+          <div class="card expanded">
+            <div class="card-r1"><span class="card-icon">🏛</span><span class="card-name">SFMOMA · Free Thursday</span></div>
+            <div class="card-r2">Until 9pm</div>
+            <div class="action-row"><div class="act">Interested</div><div class="act going">✓ Am Going ✏</div><div class="act less">Less</div></div>
+            <div class="exp">
+              <div style="font-size:9px;font-weight:600;color:#AAA;text-transform:uppercase;margin-bottom:5px;">Here Now</div>
+              <div class="person-row"><div class="av" style="background:#E0EEFF;color:#2B6CB0;">S</div><div><div class="person-name">Sarah · <span style="color:#AAA;font-weight:400;font-size:10px;">you</span></div><div class="person-note" style="color:#C0392B;">"I'm at the bar"</div></div></div>
+              <div class="person-row"><div class="av av-h">D</div><div><div class="person-name">Dan</div><div class="person-note">"Modern wing"</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 3: NOTE COMPOSER -->
+<div class="section">
+  <div class="section-title">Note Composer Overlay</div>
+  <div class="screens-row">
+
+    <!-- AM GOING NOTE -->
+    <div class="screen-wrap">
+      <div class="screen-label">6. Note — Am Going</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>7:02</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="feed overlay-dim">
+          <div class="card"><div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St</span></div><div class="card-r2">7pm · Julius Flemings</div><div class="action-row"><div class="act">Interested</div><div class="act going">✓ Am Going</div><div class="act less">Less</div></div></div>
+        </div>
+        <div class="note-overlay">
+          <div class="ov-handle"></div>
+          <div class="ov-title"><span>Add a note</span><span class="ov-x">✕</span></div>
+          <div style="font-size:10px;color:#AAA;margin-bottom:10px;">Optional · helps others find you</div>
+          <div class="note-event"><span class="note-event-icon">🎷</span><div><div class="note-event-name">Mr. Tipple's · Am Going</div><div class="note-event-sub">7pm · Julius Flemings Quartet</div></div></div>
+          <textarea class="note-input" rows="2" placeholder="Where will you be or what are you up to..."></textarea>
+          <div class="char-cnt">0 / 80</div>
+          <div class="note-btns"><div class="note-post go">Post note</div><div class="note-skip">Skip</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- HERE NOW NOTE -->
+    <div class="screen-wrap">
+      <div class="screen-label">7. Note — Here Now</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>7:44</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="feed overlay-dim">
+          <div class="card"><div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St</span></div><div class="card-r2">7pm · Julius Flemings</div><div class="action-row"><div class="act">Interested</div><div class="act going">✓ Am Going</div><div class="act less">Less</div></div></div>
+        </div>
+        <div class="note-overlay">
+          <div class="ov-handle"></div>
+          <div class="ov-title"><span>You're here!</span><span class="ov-x">✕</span></div>
+          <div style="font-size:10px;color:#AAA;margin-bottom:10px;">Let others know where to find you</div>
+          <div class="note-event"><span class="note-event-icon">🎷</span><div><div class="note-event-name">Mr. Tipple's · Here Now</div><div class="note-event-sub">7pm · Julius Flemings Quartet</div></div></div>
+          <textarea class="note-input" rows="2" placeholder="Near the stage, at the bar..."></textarea>
+          <div class="char-cnt">0 / 80</div>
+          <div class="note-btns"><div class="note-post here">Post note</div><div class="note-skip">Skip</div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <!-- PENCIL EDIT -->
+    <div class="screen-wrap">
+      <div class="screen-label">8. Committed + Pencil</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>7:10</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span><div class="header-icons"><span>⊕</span><span>🔔</span><span>◯</span></div></div>
+        <div class="date-bar">
+          <div class="date-pill"><div class="pill-lbl">When</div><div class="pill-val">Today · June 9</div></div>
+          <div class="loc-pill"><div class="pill-lbl">Where</div><div class="pill-val">Hayes Valley</div></div>
+        </div>
+        <div class="feed">
+          <div class="card"><div class="card-r1"><span class="card-icon">🎷</span><span class="card-name">Mr. Tipple's · Fell St</span></div><div class="card-r2">7pm · Julius Flemings</div><div class="action-row"><div class="act">Interested</div><div class="act going">✓ Am Going ✏</div><div class="act less">Less</div></div></div>
+          <div class="card"><div class="card-r1"><span class="card-icon">🏛</span><span class="card-name">SFMOMA · 3rd St</span></div><div class="card-r2">Free Thursday · Until 9pm</div><div class="action-row"><div class="act int">Interested</div><div class="act">Am Going</div><div class="act less">Less</div></div></div>
+          <div class="card"><div class="card-r1"><span class="card-icon">🎾</span><span class="card-name">Marina Courts · Baker St</span></div><div class="card-r2">Open Pickleball · Now</div><div class="action-row"><div class="act">Interested</div><div class="act">Am Going</div><div class="act less">Less</div></div></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 4: NOTIFICATIONS -->
+<div class="section">
+  <div class="section-title">Notification Center</div>
+  <div class="screens-row">
+    <div class="screen-wrap">
+      <div class="screen-label">9. Notifications</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>7:44</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">Notifications</span><div class="header-icons"><span style="font-size:12px;color:#AAA;">Clear all</span></div></div>
+        <div class="notif-list">
+          <div class="n-sec">Today</div>
+          <div class="notif-row unread"><div class="n-dot nd-ht"></div><div class="n-body"><div class="n-text"><strong>Dan</strong> is HereToo</div><div class="n-venue">🏛 SFMOMA · Free Thursday</div><div class="n-note">"Modern wing"</div></div><div class="n-time">2m</div></div>
+          <div class="notif-row unread"><div class="n-dot nd-go"></div><div class="n-body"><div class="n-text"><strong>Sarah</strong> is going</div><div class="n-venue">🎷 Mr. Tipple's · 7pm Jazz</div><div class="n-note">"Usually at the bar"</div></div><div class="n-time">1h</div></div>
+          <div class="notif-row unread"><div class="n-dot nd-int"></div><div class="n-body"><div class="n-text"><strong>Mike</strong> is interested</div><div class="n-venue">🎷 Mr. Tipple's · 7pm Jazz</div></div><div class="n-time">2h</div></div>
+          <div class="notif-row"><div class="n-dot nd-read"></div><div class="n-body"><div class="n-text"><strong>Jannis</strong> is going</div><div class="n-venue">🏛 SFMOMA · Free Thursday</div></div><div class="n-time">3h</div></div>
+          <div class="notif-row"><div class="n-dot nd-read"></div><div class="n-body"><div class="n-text"><strong>Dan</strong> is interested</div><div class="n-venue">🏛 SFMOMA · Free Thursday</div></div><div class="n-time">5h</div></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: SETTINGS -->
+<div class="section">
+  <div class="section-title">Settings</div>
+  <div class="screens-row">
+    <div class="screen-wrap">
+      <div class="screen-label">10. Settings</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">← Settings</span></div>
+        <div class="settings-section">
+          <div class="profile-row"><div class="profile-av">JF</div><div><div class="profile-name">Joe Fuentes</div><div class="profile-edit">Change photo</div></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">Observed interests</div>
+          <div class="settings-desc">Inferred from your activity. Read only.</div>
+          <div class="tags"><span class="tag obs">Jazz</span><span class="tag obs">Wine</span><span class="tag obs">Museums</span><span class="tag obs">Pickleball</span></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">Declared interests</div>
+          <div class="settings-desc">Tell the agent what to look for.</div>
+          <div class="tags"><span class="tag dec">Hiking</span><span class="tag dec">Photography</span><span class="tag add">+ Add</span></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">Visibility</div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Show my name</div><div class="sr-sub">Named, not anonymous</div></div><div class="toggle on"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Show places I've been</div></div><div class="toggle off"><div class="toggle-thumb"></div></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">HereToo</div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Enable HereToo</div></div><div class="toggle on"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Show me as Here Now</div></div><div class="toggle on"><div class="toggle-thumb"></div></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">Notifications</div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Momentum alerts</div></div><div class="toggle on"><div class="toggle-thumb"></div></div></div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">HereToo alerts</div></div><div class="toggle on"><div class="toggle-thumb"></div></div></div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-section-lbl">Privacy</div>
+          <div class="settings-row"><div class="sr-left"><div class="sr-lbl">Block / Mute</div></div><span class="roadmap">roadmap</span></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: ONBOARDING -->
+<div class="section">
+  <div class="section-title">Onboarding Carousel (5 Slides)</div>
+  <div class="screens-row">
+
+    <div class="screen-wrap">
+      <div class="screen-label">11. Slide 1 — Discovery</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="onb-slide">
+          <div class="onb-visual" style="background:#1A7A52;"><span class="onb-icon">📍</span></div>
+          <div class="onb-body">
+            <div class="onb-title">Your city is full of things to do.</div>
+            <div class="onb-desc">Concerts, museums, hikes, wine tastings. AmGoing finds what's happening near you and surfaces what's worth showing up for.</div>
+          </div>
+          <div class="onb-dots"><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+          <div class="onb-nav"><span class="onb-skip">Skip</span><span class="onb-next">Next →</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-label">12. Slide 2 — Learning</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="onb-slide">
+          <div class="onb-visual" style="background:#185FA5;"><span class="onb-icon">✨</span></div>
+          <div class="onb-body">
+            <div class="onb-title">Your feed learns you.</div>
+            <div class="onb-desc">Every tap, every event you attend, every category you dismiss teaches AmGoing what matters to you. No forms. Just use it.</div>
+          </div>
+          <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+          <div class="onb-nav"><span class="onb-skip">Skip</span><span class="onb-next">Next →</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-label">13. Slide 3 — Momentum</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="onb-slide">
+          <div class="onb-visual" style="background:#7B2335;"><span class="onb-icon">👥</span></div>
+          <div class="onb-body">
+            <div class="onb-title">See who's going.</div>
+            <div class="onb-desc">Social momentum turns a listing into something worth showing up for. When real people are going, you'll know.</div>
+          </div>
+          <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div><div class="onb-dot"></div></div>
+          <div class="onb-nav"><span class="onb-skip">Skip</span><span class="onb-next">Next →</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-label">14. Slide 4 — HereToo</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="onb-slide">
+          <div class="onb-visual" style="background:#3C3489;"><span class="onb-icon">🔔</span></div>
+          <div class="onb-body">
+            <div class="onb-title">HereToo.</div>
+            <div class="onb-desc">When someone you've opted into arrives at the same place, AmGoing lets you know. A quiet nudge that you're not alone.</div>
+          </div>
+          <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div><div class="onb-dot"></div></div>
+          <div class="onb-nav"><span class="onb-skip">Skip</span><span class="onb-next">Next →</span></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-label">15. Slide 5 — Interests</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="onb-slide">
+          <div class="onb-visual" style="background:#26215C;"><span class="onb-icon">🎛</span></div>
+          <div class="onb-body">
+            <div class="onb-title">What are you into?</div>
+            <div class="onb-desc" style="margin-bottom:10px;">These float to the top of your feed. Your agent learns the rest from how you use it.</div>
+            <div class="tags" style="padding:0;">
+              <span class="tag obs">Jazz</span><span class="tag obs">Wine</span><span class="tag">Museums</span><span class="tag obs">Hiking</span><span class="tag">Comedy</span><span class="tag">Photography</span><span class="tag obs">Pickleball</span><span class="tag">Theater</span><span class="tag">Food Festivals</span><span class="tag">Live Music</span><span class="tag">Art</span><span class="tag">Film</span>
+            </div>
+          </div>
+          <div class="onb-dots"><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot active"></div></div>
+          <div class="onb-nav"><span class="onb-skip">Skip</span><span class="onb-next" style="color:#1A7A52;font-weight:600;">Get started →</span></div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SECTION 7: EMPTY STATES -->
+<div class="section">
+  <div class="section-title">Empty States</div>
+  <div class="screens-row">
+
+    <div class="screen-wrap">
+      <div class="screen-label">16. Loading</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span></div>
+        <div class="empty">
+          <div class="empty-icon">🗺️</div>
+          <div class="empty-title">Building your feed...</div>
+          <div class="empty-sub">Our AI is out exploring Hayes Valley. Give it a sec. <span style="color:#2B6CB0;">ℹ</span></div>
+          <div style="height:4px;background:#EEE;border-radius:2px;width:80%;margin-top:16px;overflow:hidden;"><div style="height:100%;width:60%;background:#1A7A52;border-radius:2px;"></div></div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="screen-wrap">
+      <div class="screen-label">17. No Events</div>
+      <div class="phone"><div class="phone-inner">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="app-header"><span class="app-title">AmGoing</span></div>
+        <div class="date-bar">
+          <div class="date-pill"><div class="pill-lbl">When</div><div class="pill-val">Today · June 9</div></div>
+          <div class="loc-pill"><div class="pill-lbl">Where</div><div class="pill-val">Palmdale</div></div>
+        </div>
+        <div class="empty">
+          <div class="empty-icon">🌵</div>
+          <div class="empty-title">Not much happening today.</div>
+          <div class="empty-sub">Even the tumbleweeds took the night off. Check back tomorrow or try a different date.</div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

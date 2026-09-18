@@ -1,0 +1,14 @@
+# dotell — Cursor Rules
+# Read this file before writing any code. These rules are non-negotiable.
+
+---
+
+## 0. SINGLE-REPO BOUNDARY (critical)
+
+This workspace must **never** modify files outside the current, single repo it was explicitly opened for (`@joefuentes/dotell`).
+
+If a task references or requires changes to a separate, different project (e.g. AmGoing while working in dotell, or vice versa):
+
+1. **Stop** and explicitly flag it to the user.
+2. **Do not** make the change — even if the file is technically accessible from this session.
+3. Cross-repo changes must always be a **separate, deliberate, explicitly opened session** for that specific repo — never bundled into a task about a different one.

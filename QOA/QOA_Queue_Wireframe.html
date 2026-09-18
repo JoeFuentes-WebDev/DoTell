@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QOA — Order Queue Wireframe</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #18181b;
+  --pending: #ef4444;
+  --pbg: #fef2f2;
+  --pbd: #fecaca;
+  --progress: #f59e0b;
+  --abg: #fffbeb;
+  --abd: #fde68a;
+  --ready: #16a34a;
+  --gbg: #f0fdf4;
+  --gbd: #86efac;
+  --done: #6366f1;
+  --dbg: #eef2ff;
+  --dbd: #c7d2fe;
+  --gray: #f4f4f5;
+  --border: #e4e4e7;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: #f0f0f2;
+  color: var(--black);
+  min-height: 100vh;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: var(--black);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+.biz-name { font-size: 11px; color: #555; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.pause-btn {
+  background: #fff7ed; border: 1.5px solid #fed7aa;
+  border-radius: 7px; padding: 6px 12px;
+  font-size: 11px; font-weight: 700; color: #9a3412;
+  cursor: pointer; display: flex; align-items: center; gap: 6px;
+}
+.pause-btn.active { background: #fef2f2; border-color: #fecaca; color: var(--pending); }
+.sound-btn {
+  font-size: 16px; color: #555; cursor: pointer;
+  background: none; border: none; padding: 4px;
+}
+.manual-btn {
+  background: #fff; color: var(--black); border: none;
+  border-radius: 7px; padding: 6px 12px;
+  font-size: 11px; font-weight: 700; cursor: pointer;
+}
+
+/* ── BOARD LAYOUT ── */
+.board-wrap {
+  padding: 20px 16px;
+  overflow-x: auto;
+}
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 12px;
+  min-width: 900px;
+}
+
+/* ── LANE ── */
+.lane { display: flex; flex-direction: column; min-height: 500px; }
+.lane-header {
+  border-radius: 10px 10px 0 0;
+  padding: 10px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1px;
+}
+.lane-header.new    { background: var(--pbg); border: 1.5px solid var(--pbd); border-bottom: none; }
+.lane-header.prog   { background: var(--abg); border: 1.5px solid var(--abd); border-bottom: none; }
+.lane-header.ready  { background: var(--gbg); border: 1.5px solid var(--gbd); border-bottom: none; }
+.lane-header.done   { background: var(--dbg); border: 1.5px solid var(--dbd); border-bottom: none; }
+
+.lane-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.lane-header.new   .lane-title { color: var(--pending); }
+.lane-header.prog  .lane-title { color: #92400e; }
+.lane-header.ready .lane-title { color: var(--ready); }
+.lane-header.done  .lane-title { color: var(--done); }
+
+.lane-count {
+  border-radius: 20px; padding: 2px 8px;
+  font-size: 10px; font-weight: 800;
+}
+.lane-header.new   .lane-count { background: var(--pending); color: #fff; }
+.lane-header.prog  .lane-count { background: var(--progress); color: #fff; }
+.lane-header.ready .lane-count { background: var(--ready); color: #fff; }
+.lane-header.done  .lane-count { background: var(--done); color: #fff; }
+
+.lane-body {
+  flex: 1;
+  border-radius: 0 0 10px 10px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.lane-body.new   { background: #fff8f8; border: 1.5px solid var(--pbd); border-top: none; }
+.lane-body.prog  { background: #fffdf5; border: 1.5px solid var(--abd); border-top: none; }
+.lane-body.ready { background: #f7fdf9; border: 1.5px solid var(--gbd); border-top: none; }
+.lane-body.done  { background: #f5f6ff; border: 1.5px solid var(--dbd); border-top: none; }
+
+/* ── ORDER CARD ── */
+.order-card {
+  background: #fff;
+  border-radius: 9px;
+  padding: 11px 12px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  position: relative;
+}
+.order-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+
+.card-new-dot {
+  position: absolute; top: 10px; right: 10px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--pending);
+}
+
+.card-top {
+  display: flex; align-items: baseline; gap: 6px;
+  margin-bottom: 3px;
+}
+.card-num { font-size: 16px; font-weight: 900; color: var(--black); letter-spacing: -0.5px; }
+.card-sep { font-size: 10px; color: #ccc; }
+.card-name { font-size: 12px; font-weight: 700; color: var(--black); }
+
+.card-item {
+  font-size: 10px; color: #888;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  max-width: 100%;
+  margin-bottom: 9px;
+}
+.card-item.multi { color: #666; }
+
+.card-time { font-size: 9px; color: #bbb; margin-bottom: 8px; }
+.card-time.urgent { color: var(--pending); font-weight: 700; }
+
+.card-actions { display: flex; gap: 6px; }
+.btn-view {
+  flex: 1; padding: 5px 0; border-radius: 6px;
+  font-size: 10px; font-weight: 700; cursor: pointer;
+  background: #f4f4f5; border: 1px solid #e4e4e7; color: #555;
+  text-align: center;
+}
+.btn-view:hover { background: #e4e4e7; }
+.btn-move {
+  flex: 1; padding: 5px 0; border-radius: 6px;
+  font-size: 10px; font-weight: 700; cursor: pointer;
+  border: none; color: #fff; text-align: center;
+}
+.lane-body.new  .btn-move { background: var(--progress); }
+.lane-body.prog .btn-move { background: var(--ready); }
+.lane-body.ready .btn-move { background: var(--done); }
+
+/* done cards are dimmer, no move btn */
+.lane-body.done .order-card { opacity: 0.7; }
+.lane-body.done .card-num { font-size: 14px; color: #888; }
+.lane-body.done .card-name { color: #888; }
+
+/* ── MODAL ── */
+.modal-bg {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 200;
+  align-items: center; justify-content: center;
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 360px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  position: relative;
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  font-size: 20px; color: #ccc; cursor: pointer;
+  background: none; border: none; line-height: 1;
+}
+.modal-order-num { font-size: 32px; font-weight: 900; letter-spacing: -1.5px; margin-bottom: 2px; }
+.modal-diner { font-size: 15px; font-weight: 700; color: var(--black); margin-bottom: 16px; }
+.modal-items { margin-bottom: 14px; }
+.modal-item-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--black);
+  padding: 5px 0; border-bottom: 1px solid #f4f4f5;
+}
+.modal-item-row:last-child { border-bottom: none; }
+.modal-note { font-size: 10px; color: var(--progress); padding: 3px 0 5px; font-style: italic; }
+.modal-total {
+  display: flex; justify-content: space-between;
+  font-size: 13px; font-weight: 800; color: var(--black);
+  padding: 12px 0 14px; border-top: 2px solid #f0f0f0;
+}
+.modal-time { font-size: 10px; color: #aaa; margin-bottom: 16px; }
+.modal-actions { display: flex; flex-direction: column; gap: 8px; }
+.modal-move-btn {
+  width: 100%; padding: 12px; border: none; border-radius: 10px;
+  font-size: 13px; font-weight: 800; cursor: pointer; color: #fff;
+}
+.modal-move-btn.to-progress { background: var(--progress); }
+.modal-move-btn.to-ready    { background: var(--ready); }
+.modal-move-btn.to-done     { background: var(--done); }
+.modal-cancel-btn {
+  width: 100%; padding: 10px; border: 1.5px solid #fecaca;
+  border-radius: 10px; font-size: 12px; font-weight: 700;
+  cursor: pointer; color: var(--pending); background: transparent;
+}
+.modal-done-msg {
+  text-align: center; padding: 8px 0;
+  font-size: 12px; color: #aaa;
+}
+
+/* ── SECTION DIVIDER ── */
+.section-divider {
+  padding: 32px 16px 0;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: #aaa;
+  border-top: 1px solid #ddd;
+  margin-top: 8px;
+}
+.section-note {
+  padding: 6px 16px 20px;
+  font-size: 11px; color: #aaa; line-height: 1.5;
+}
+
+/* ══════════════════════
+   MOBILE VERSION
+══════════════════════ */
+.mobile-section { padding: 20px 16px; }
+.mobile-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: #aaa; margin-bottom: 16px;
+}
+
+/* phone frames */
+.phones-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+.phone { width: 240px; flex-shrink: 0; }
+.phone-label { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.phone-frame {
+  background: #1c1c1e; border: 2px solid #333;
+  border-radius: 40px; padding: 14px;
+}
+.phone-notch { width: 64px; height: 6px; background: #333; border-radius: 3px; margin: 0 auto 12px; }
+.phone-screen { background: #f7f7f7; border-radius: 22px; overflow: hidden; min-height: 520px; display: flex; flex-direction: column; }
+
+/* mobile top bar */
+.mob-bar {
+  background: var(--black); padding: 12px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mob-title { font-size: 14px; font-weight: 900; color: #fff; }
+.mob-sub { font-size: 8px; color: #555; }
+.mob-pause { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 5px; padding: 4px 8px; font-size: 9px; font-weight: 700; color: #9a3412; cursor: pointer; }
+
+/* mobile tab strip */
+.mob-tabs {
+  background: #fff; display: flex;
+  border-bottom: 2px solid #f0f0f0;
+  overflow-x: auto;
+}
+.mob-tab {
+  flex-shrink: 0; padding: 9px 12px;
+  font-size: 10px; font-weight: 700; color: #aaa;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap; position: relative;
+}
+.mob-tab.on { color: var(--black); }
+.mob-tab.on::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--black); }
+.mob-tab-count {
+  border-radius: 10px; padding: 1px 5px;
+  font-size: 8px; font-weight: 800;
+  background: #f0f0f0; color: #888;
+}
+.mob-tab.on .mob-tab-count { background: var(--black); color: #fff; }
+.mob-tab-count.h { background: var(--pending) !important; color: #fff !important; }
+.mob-tab-count.a { background: var(--progress) !important; color: #fff !important; }
+.mob-tab-count.g { background: var(--ready) !important; color: #fff !important; }
+
+/* new order banner */
+.mob-new-banner {
+  background: var(--pbg); padding: 7px 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mob-new-text { font-size: 10px; font-weight: 700; color: var(--pending); }
+.mob-new-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pending); }
+
+/* mobile cards */
+.mob-cards { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+
+.mob-card {
+  background: #fff; border-radius: 10px;
+  padding: 10px 12px; border: 1.5px solid #e4e4e7;
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+}
+.mob-card.p { border-color: var(--pending); background: var(--pbg); }
+.mob-card.a { border-color: var(--progress); background: var(--abg); }
+.mob-card.g { border-color: var(--ready); background: var(--gbg); }
+
+.mob-num { font-size: 22px; font-weight: 900; color: var(--black); min-width: 46px; letter-spacing: -1px; line-height: 1; }
+.mob-card.p .mob-num { color: var(--pending); }
+.mob-card.a .mob-num { color: #92400e; }
+.mob-card.g .mob-num { color: var(--ready); }
+
+.mob-info { flex: 1; }
+.mob-name { font-size: 12px; font-weight: 700; color: var(--black); }
+.mob-time { font-size: 9px; color: #aaa; margin-top: 1px; }
+.mob-time.h { color: var(--pending); font-weight: 700; }
+
+.mob-new-badge {
+  background: var(--pending); color: #fff;
+  font-size: 7px; font-weight: 800; border-radius: 3px; padding: 2px 5px;
+}
+.mob-sms-badge {
+  background: var(--ready); color: #fff;
+  font-size: 7px; font-weight: 800; border-radius: 3px; padding: 2px 5px;
+}
+
+/* expanded card */
+.mob-card-expanded {
+  background: #fff; border-radius: 10px;
+  border: 2px solid var(--pending);
+  overflow: hidden;
+}
+.mob-card-expanded.a { border-color: var(--progress); }
+.mob-card-expanded.g { border-color: var(--ready); }
+.mob-exp-header {
+  background: var(--pbg); padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.mob-exp-header.a { background: var(--abg); }
+.mob-exp-header.g { background: var(--gbg); }
+.mob-exp-num { font-size: 22px; font-weight: 900; color: var(--pending); min-width: 46px; }
+.mob-exp-header.a .mob-exp-num { color: #92400e; }
+.mob-exp-header.g .mob-exp-num { color: var(--ready); }
+.mob-exp-name { font-size: 12px; font-weight: 700; color: var(--black); }
+.mob-exp-body { padding: 10px 12px; }
+.mob-exp-item { display: flex; justify-content: space-between; font-size: 11px; color: var(--black); padding: 3px 0; border-bottom: 1px solid #f4f4f5; }
+.mob-exp-item:last-child { border-bottom: none; }
+.mob-exp-note { font-size: 9px; color: var(--progress); padding: 2px 0 4px; font-style: italic; }
+.mob-exp-total { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--black); padding: 8px 0; border-top: 2px solid #f0f0f0; margin-top: 4px; }
+.mob-exp-actions { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; }
+.mob-exp-move {
+  width: 100%; padding: 10px; border: none; border-radius: 8px;
+  font-size: 12px; font-weight: 800; cursor: pointer; color: #fff;
+}
+.mob-exp-move.to-p { background: var(--progress); }
+.mob-exp-move.to-r { background: var(--ready); }
+.mob-exp-move.to-d { background: var(--done); }
+.mob-exp-back { width: 100%; padding: 8px; border: 1.5px solid #e4e4e7; border-radius: 8px; font-size: 11px; font-weight: 700; color: #888; background: transparent; cursor: pointer; }
+.mob-exp-cancel { width: 100%; padding: 8px; border: 1.5px solid #fecaca; border-radius: 8px; font-size: 11px; font-weight: 700; color: var(--pending); background: transparent; cursor: pointer; }
+
+/* dbl-tap hint */
+.dbl-hint { font-size: 8px; color: #ccc; text-align: center; padding: 4px 0; }
+
+/* bottom bar */
+.mob-bottom { background: #fff; border-top: 1px solid #f0f0f0; display: flex; border-radius: 0 0 22px 22px; }
+.mob-btab { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; cursor: pointer; position: relative; }
+.mob-btab.on .mob-bicon { color: var(--black); }
+.mob-btab.on .mob-blbl { color: var(--black); font-weight: 700; }
+.mob-bicon { font-size: 18px; color: #d4d4d8; }
+.mob-blbl { font-size: 8px; color: #a1a1aa; margin-top: 2px; }
+.mob-bdot { position: absolute; top: 5px; right: 16px; width: 8px; height: 8px; background: var(--pending); border-radius: 50%; border: 2px solid #fff; }
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     PAGE HEADER
+══════════════════════════════════ -->
+<div class="page-header">
+  <div>
+    <div class="logo">QOA</div>
+  </div>
+  <div class="biz-name">Papito Mexican Food &nbsp;·&nbsp; Today: 16 orders</div>
+  <div class="header-right">
+    <button class="sound-btn" title="Sound alerts on">🔊</button>
+    <button class="pause-btn">⏸ Pause ordering</button>
+    <button class="manual-btn">＋ Walk-up</button>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     DESKTOP — KANBAN BOARD
+══════════════════════════════════ -->
+<div class="board-wrap">
+
+  <div class="board">
+
+    <!-- ── NEW ── -->
+    <div class="lane">
+      <div class="lane-header new">
+        <span class="lane-title">New</span>
+        <span class="lane-count">4</span>
+      </div>
+      <div class="lane-body new">
+
+        <div class="order-card">
+          <div class="card-new-dot"></div>
+          <div class="card-top">
+            <span class="card-num">#47</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Marcus</span>
+          </div>
+          <div class="card-item">Carne Asada Taco × 2</div>
+          <div class="card-time urgent">just now</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Start →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#46</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Priya</span>
+          </div>
+          <div class="card-item multi">Fish Taco, Al Pastor × 2</div>
+          <div class="card-time">2m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Start →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#45</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Derek</span>
+          </div>
+          <div class="card-item">Burrito Supreme</div>
+          <div class="card-time">4m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Start →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#44</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Keisha</span>
+          </div>
+          <div class="card-item">Chips &amp; Guac, Horchata</div>
+          <div class="card-time">5m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Start →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── IN PROGRESS ── -->
+    <div class="lane">
+      <div class="lane-header prog">
+        <span class="lane-title">In Progress</span>
+        <span class="lane-count">3</span>
+      </div>
+      <div class="lane-body prog">
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#43</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Sandy</span>
+          </div>
+          <div class="card-item">Chocolate Ice Cream</div>
+          <div class="card-time urgent">9m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Ready →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#42</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Joe</span>
+          </div>
+          <div class="card-item">Carne Asada × 2, Horchata</div>
+          <div class="card-time">7m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Ready →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#41</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Ana</span>
+          </div>
+          <div class="card-item">Fish Taco</div>
+          <div class="card-time">11m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Ready →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── READY ── -->
+    <div class="lane">
+      <div class="lane-header ready">
+        <span class="lane-title">Ready</span>
+        <span class="lane-count">2</span>
+      </div>
+      <div class="lane-body ready">
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#40</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Lena</span>
+          </div>
+          <div class="card-item">Veggie Burrito</div>
+          <div class="card-time">SMS sent · 2m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Picked Up →</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#39</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Tom</span>
+          </div>
+          <div class="card-item">Carne Asada × 3</div>
+          <div class="card-time">SMS sent · 5m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+            <button class="btn-move">Picked Up →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── PICKED UP ── -->
+    <div class="lane">
+      <div class="lane-header done">
+        <span class="lane-title">Picked Up</span>
+        <span class="lane-count">7</span>
+      </div>
+      <div class="lane-body done">
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#38</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Raj</span>
+          </div>
+          <div class="card-item">Horchata × 2</div>
+          <div class="card-time">14m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#37</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Mei</span>
+          </div>
+          <div class="card-item">Al Pastor × 2, Chips</div>
+          <div class="card-time">18m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+          </div>
+        </div>
+
+        <div class="order-card">
+          <div class="card-top">
+            <span class="card-num">#36</span>
+            <span class="card-sep">·</span>
+            <span class="card-name">Carlos</span>
+          </div>
+          <div class="card-item">Burrito Supreme</div>
+          <div class="card-time">22m ago</div>
+          <div class="card-actions">
+            <button class="btn-view">View</button>
+          </div>
+        </div>
+
+        <div style="text-align:center;font-size:9px;color:#aaa;padding:8px 0;">+ 4 more today</div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     MODAL (desktop)
+══════════════════════════════════ -->
+<div class="modal-bg open" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('modal').classList.remove('open')">✕</button>
+    <div class="modal-order-num" style="color:var(--progress);">#43</div>
+    <div class="modal-diner">Sandy</div>
+    <div class="modal-time">In Progress · started 9m ago</div>
+    <div class="modal-items">
+      <div class="modal-item-row"><span>Chocolate Ice Cream × 1</span><span>$6.50</span></div>
+      <div class="modal-note">✏️ Extra sprinkles please</div>
+      <div class="modal-item-row"><span>Horchata × 1</span><span>$3.50</span></div>
+    </div>
+    <div class="modal-total"><span>Total</span><span>$10.00</span></div>
+    <div class="modal-actions">
+      <button class="modal-move-btn to-ready">Mark Ready → SMS sent</button>
+      <button class="modal-cancel-btn">Cancel Order</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════
+     SECTION DIVIDER
+══════════════════════════════════ -->
+<div class="section-divider">Mobile Version</div>
+<div class="section-note">
+  Tab strip (New / In Progress / Ready / Picked Up) with live badge counts. Cards show order number + name only.
+  Single tap → expand inline with full detail + action button. Double-tap → advance status directly (no modal, no confirmation).
+  Pause always visible in header.
+</div>
+
+
+<!-- ══════════════════════════════════
+     MOBILE
+══════════════════════════════════ -->
+<div class="mobile-section">
+<div class="phones-row">
+
+  <!-- Phone 1: New tab, cards only -->
+  <div class="phone">
+    <div class="phone-label">New tab — card list</div>
+    <div class="phone-frame"><div class="phone-notch"></div>
+    <div class="phone-screen">
+
+      <div class="mob-bar">
+        <div><div class="mob-title">Orders</div><div class="mob-sub">Papito Mexican Food</div></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;color:#555;">🔊</span>
+          <div class="mob-pause">⏸ Pause</div>
+        </div>
+      </div>
+
+      <div class="mob-new-banner">
+        <div class="mob-new-text">🔔 New order — #47 Marcus</div>
+        <div class="mob-new-dot"></div>
+      </div>
+
+      <div class="mob-tabs">
+        <div class="mob-tab on">New <span class="mob-tab-count h">4</span></div>
+        <div class="mob-tab">In Progress <span class="mob-tab-count a">3</span></div>
+        <div class="mob-tab">Ready <span class="mob-tab-count g">2</span></div>
+        <div class="mob-tab">Picked Up <span class="mob-tab-count">7</span></div>
+      </div>
+
+      <div class="mob-cards">
+        <div class="mob-card p">
+          <div class="mob-num">#47</div>
+          <div class="mob-info"><div class="mob-name">Marcus</div><div class="mob-time h">just now</div></div>
+          <div class="mob-new-badge">NEW</div>
+        </div>
+        <div class="mob-card p">
+          <div class="mob-num">#46</div>
+          <div class="mob-info"><div class="mob-name">Priya</div><div class="mob-time">2m ago</div></div>
+        </div>
+        <div class="mob-card p">
+          <div class="mob-num">#45</div>
+          <div class="mob-info"><div class="mob-name">Derek</div><div class="mob-time">4m ago</div></div>
+        </div>
+        <div class="mob-card p">
+          <div class="mob-num">#44</div>
+          <div class="mob-info"><div class="mob-name">Keisha</div><div class="mob-time">5m ago</div></div>
+        </div>
+        <div class="dbl-hint">Double-tap a card to move it to In Progress</div>
+      </div>
+
+      <div class="mob-bottom">
+        <div class="mob-btab on"><div class="mob-bdot"></div><div class="mob-bicon">📋</div><div class="mob-blbl">Orders</div></div>
+        <div class="mob-btab"><div class="mob-bicon">🍽️</div><div class="mob-blbl">Menu</div></div>
+        <div class="mob-btab"><div class="mob-bicon">💰</div><div class="mob-blbl">Payouts</div></div>
+        <div class="mob-btab"><div class="mob-bicon">⚙️</div><div class="mob-blbl">Settings</div></div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- Phone 2: card tapped / expanded -->
+  <div class="phone">
+    <div class="phone-label">Card tapped — expanded inline</div>
+    <div class="phone-frame"><div class="phone-notch"></div>
+    <div class="phone-screen">
+
+      <div class="mob-bar">
+        <div><div class="mob-title">Orders</div><div class="mob-sub">Papito Mexican Food</div></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;color:#555;">🔊</span>
+          <div class="mob-pause">⏸ Pause</div>
+        </div>
+      </div>
+
+      <div class="mob-tabs">
+        <div class="mob-tab on">New <span class="mob-tab-count h">4</span></div>
+        <div class="mob-tab">In Progress <span class="mob-tab-count a">3</span></div>
+        <div class="mob-tab">Ready <span class="mob-tab-count g">2</span></div>
+        <div class="mob-tab">Picked Up <span class="mob-tab-count">7</span></div>
+      </div>
+
+      <div class="mob-cards">
+        <!-- expanded -->
+        <div class="mob-card-expanded">
+          <div class="mob-exp-header">
+            <div class="mob-exp-num">#47</div>
+            <div>
+              <div class="mob-exp-name">Marcus</div>
+              <div style="font-size:8px;color:#aaa;">just now</div>
+            </div>
+          </div>
+          <div class="mob-exp-body">
+            <div class="mob-exp-item"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+            <div class="mob-exp-note">✏️ No onion, extra lime</div>
+            <div class="mob-exp-item"><span>Horchata × 1</span><span>$3.50</span></div>
+            <div class="mob-exp-total"><span>Total</span><span>$12.50</span></div>
+            <div class="mob-exp-actions">
+              <button class="mob-exp-move to-p">Start Order →</button>
+              <button class="mob-exp-cancel">Cancel Order</button>
+            </div>
+            <div class="dbl-hint" style="margin-top:6px;">Or double-tap the card to start without opening</div>
+          </div>
+        </div>
+
+        <!-- rest collapsed -->
+        <div class="mob-card p">
+          <div class="mob-num">#46</div>
+          <div class="mob-info"><div class="mob-name">Priya</div><div class="mob-time">2m ago</div></div>
+        </div>
+        <div class="mob-card p">
+          <div class="mob-num">#45</div>
+          <div class="mob-info"><div class="mob-name">Derek</div><div class="mob-time">4m ago</div></div>
+        </div>
+      </div>
+
+      <div class="mob-bottom">
+        <div class="mob-btab on"><div class="mob-bdot"></div><div class="mob-bicon">📋</div><div class="mob-blbl">Orders</div></div>
+        <div class="mob-btab"><div class="mob-bicon">🍽️</div><div class="mob-blbl">Menu</div></div>
+        <div class="mob-btab"><div class="mob-bicon">💰</div><div class="mob-blbl">Payouts</div></div>
+        <div class="mob-btab"><div class="mob-bicon">⚙️</div><div class="mob-blbl">Settings</div></div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- Phone 3: In Progress tab -->
+  <div class="phone">
+    <div class="phone-label">In Progress tab</div>
+    <div class="phone-frame"><div class="phone-notch"></div>
+    <div class="phone-screen">
+
+      <div class="mob-bar">
+        <div><div class="mob-title">Orders</div><div class="mob-sub">Papito Mexican Food</div></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;color:#555;">🔊</span>
+          <div class="mob-pause">⏸ Pause</div>
+        </div>
+      </div>
+
+      <div class="mob-tabs">
+        <div class="mob-tab">New <span class="mob-tab-count h">4</span></div>
+        <div class="mob-tab on">In Progress <span class="mob-tab-count a">3</span></div>
+        <div class="mob-tab">Ready <span class="mob-tab-count g">2</span></div>
+        <div class="mob-tab">Picked Up <span class="mob-tab-count">7</span></div>
+      </div>
+
+      <div class="mob-cards">
+        <div class="mob-card a">
+          <div class="mob-num">#43</div>
+          <div class="mob-info"><div class="mob-name">Sandy</div><div class="mob-time h">9m ago</div></div>
+        </div>
+        <div class="mob-card a">
+          <div class="mob-num">#42</div>
+          <div class="mob-info"><div class="mob-name">Joe</div><div class="mob-time">7m ago</div></div>
+        </div>
+        <div class="mob-card a">
+          <div class="mob-num">#41</div>
+          <div class="mob-info"><div class="mob-name">Ana</div><div class="mob-time">11m ago</div></div>
+        </div>
+        <div class="dbl-hint">Double-tap to mark Ready (SMS auto-sends)</div>
+      </div>
+
+      <div class="mob-bottom">
+        <div class="mob-btab on"><div class="mob-bicon">📋</div><div class="mob-blbl">Orders</div></div>
+        <div class="mob-btab"><div class="mob-bicon">🍽️</div><div class="mob-blbl">Menu</div></div>
+        <div class="mob-btab"><div class="mob-bicon">💰</div><div class="mob-blbl">Payouts</div></div>
+        <div class="mob-btab"><div class="mob-bicon">⚙️</div><div class="mob-blbl">Settings</div></div>
+      </div>
+
+    </div></div>
+  </div>
+
+  <!-- Phone 4: Ready tab, card expanded -->
+  <div class="phone">
+    <div class="phone-label">Ready — card expanded</div>
+    <div class="phone-frame"><div class="phone-notch"></div>
+    <div class="phone-screen">
+
+      <div class="mob-bar">
+        <div><div class="mob-title">Orders</div><div class="mob-sub">Papito Mexican Food</div></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:14px;color:#555;">🔊</span>
+        </div>
+      </div>
+
+      <div class="mob-tabs">
+        <div class="mob-tab">New <span class="mob-tab-count">2</span></div>
+        <div class="mob-tab">In Progress <span class="mob-tab-count a">2</span></div>
+        <div class="mob-tab on">Ready <span class="mob-tab-count g">2</span></div>
+        <div class="mob-tab">Picked Up <span class="mob-tab-count">9</span></div>
+      </div>
+
+      <div class="mob-cards">
+        <!-- expanded ready card -->
+        <div class="mob-card-expanded g">
+          <div class="mob-exp-header g">
+            <div class="mob-exp-num">#40</div>
+            <div>
+              <div class="mob-exp-name">Lena</div>
+              <div style="font-size:8px;color:var(--ready);">SMS sent · 2m ago</div>
+            </div>
+          </div>
+          <div class="mob-exp-body">
+            <div class="mob-exp-item"><span>Veggie Burrito × 1</span><span>$10.50</span></div>
+            <div class="mob-exp-item"><span>Agua Fresca × 1</span><span>$3.00</span></div>
+            <div class="mob-exp-total"><span>Total</span><span>$13.50</span></div>
+            <div class="mob-exp-actions">
+              <button class="mob-exp-move to-d">Picked Up ✓</button>
+              <button class="mob-exp-back">← Back to In Progress</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mob-card g">
+          <div class="mob-num">#39</div>
+          <div class="mob-info"><div class="mob-name">Tom</div><div style="font-size:9px;color:var(--ready);">SMS sent · 5m ago</div></div>
+          <div class="mob-sms-badge">SMS ✓</div>
+        </div>
+      </div>
+
+      <div class="mob-bottom">
+        <div class="mob-btab on"><div class="mob-bicon">📋</div><div class="mob-blbl">Orders</div></div>
+        <div class="mob-btab"><div class="mob-bicon">🍽️</div><div class="mob-blbl">Menu</div></div>
+        <div class="mob-btab"><div class="mob-bicon">💰</div><div class="mob-blbl">Payouts</div></div>
+        <div class="mob-btab"><div class="mob-bicon">⚙️</div><div class="mob-blbl">Settings</div></div>
+      </div>
+
+    </div></div>
+  </div>
+
+</div>
+</div>
+
+<div style="padding:32px;text-align:center;font-size:11px;color:#aaa;">
+  QOA Order Queue · getqoa.com · May 2026
+</div>
+
+</body>
+</html>

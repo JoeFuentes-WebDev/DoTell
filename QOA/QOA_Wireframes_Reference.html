@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QOA — Wireframe Reference</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#18181b;--white:#fff;--g50:#fafafa;--g100:#f4f4f5;--g200:#e4e4e7;--g400:#a1a1aa;--g600:#52525b;
+  --pending:#ef4444;--pbg:#fef2f2;--progress:#f59e0b;--abg:#fffbeb;--ready:#16a34a;--gbg:#f0fdf4;
+  --teal:#0d9488;--tbg:#f0fdfa;--purple:#7c3aed;--blue:#2563eb;--blbg:#eff6ff;--amber:#d97706;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+body{font-family:var(--font);background:#0f0f0f;color:#e0e0e0}
+.doc-nav{position:sticky;top:0;z-index:100;background:#111;border-bottom:1px solid #222;padding:0 24px;display:flex;align-items:center;gap:0;overflow-x:auto}
+.doc-nav a{display:block;padding:14px 16px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#555;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent}
+.doc-nav a:hover{color:#ccc}
+.doc-nav .logo{font-size:16px;font-weight:900;color:#fff;letter-spacing:-1px;margin-right:16px;padding:14px 0}
+.section{padding:48px 32px;border-bottom:1px solid #1a1a1a;scroll-margin-top:48px}
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#444;margin-bottom:8px}
+.section-title{font-size:22px;font-weight:800;color:#fff;margin-bottom:6px}
+.section-desc{font-size:13px;color:#555;margin-bottom:32px;line-height:1.6;max-width:640px}
+.screens-row{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.screen-label{font-size:10px;color:#444;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+hr.sub{border:none;border-top:1px solid #1a1a1a;margin:32px 0}
+.sub-title{font-size:13px;font-weight:700;color:#aaa;margin-bottom:20px}
+.note{font-size:10px;color:#555;background:#111;border-left:2px solid #333;padding:8px 12px;border-radius:0 6px 6px 0;margin-top:16px}
+
+/* frames */
+.phone{width:220px;flex-shrink:0}
+.phone-frame{background:#1c1c1e;border:1.5px solid #2a2a2a;border-radius:36px;padding:14px}
+.phone-notch{width:64px;height:6px;background:#2a2a2a;border-radius:3px;margin:0 auto 12px}
+.phone-screen{background:#fff;border-radius:20px;overflow:hidden;min-height:440px}
+.dw{width:100%;margin-bottom:32px}
+.df{background:#1c1c1e;border:1.5px solid #2a2a2a;border-radius:12px;overflow:hidden}
+.dc-bar{background:#252525;padding:10px 14px;display:flex;align-items:center;gap:6px}
+.dc{width:11px;height:11px;border-radius:50%}
+.dc-r{background:#ff5f57}.dc-y{background:#febc2e}.dc-g{background:#28c840}
+.url-pill{flex:1;margin-left:8px;background:#1a1a1a;border-radius:5px;padding:4px 12px;font-size:11px;color:#555;font-family:monospace}
+.ds{background:#fff}
+
+/* screen base */
+.s{font-size:11px;color:#18181b}
+
+/* admin layout */
+.al{display:flex;min-height:420px}
+.sb{width:180px;background:var(--black);padding:16px;flex-shrink:0;display:flex;flex-direction:column}
+.sb-brand{font-size:18px;font-weight:900;color:#fff;letter-spacing:-1px;margin-bottom:2px}
+.sb-biz{font-size:9px;color:#444;margin-bottom:20px}
+.ni{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:7px;font-size:11px;color:#555;margin-bottom:2px;cursor:pointer}
+.ni.on{background:#252525;color:#fff}
+.ni-l{display:flex;align-items:center;gap:7px}
+.nb{background:var(--pending);color:#fff;border-radius:10px;padding:1px 6px;font-size:8px;font-weight:800}
+.sf{margin-top:auto;padding-top:14px;border-top:1px solid #252525}
+.sf-fb{font-size:9px;color:#444;padding:6px 10px;cursor:pointer}
+.am{flex:1;padding:20px;overflow:hidden}
+.pt{font-size:16px;font-weight:800;color:var(--black);margin-bottom:2px}
+.ps{font-size:10px;color:#888;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+/* buttons */
+.btn{border:none;border-radius:10px;padding:10px 16px;font-size:11px;font-weight:700;cursor:pointer;width:100%;display:block;text-align:center;margin-top:6px}
+.btn-d{background:var(--black);color:#fff}
+.btn-o{background:transparent;border:1.5px solid #e0e0e0;color:#666}
+.btn-g{background:var(--ready);color:#fff}
+.btn-r{background:transparent;border:1.5px solid #fecaca;color:var(--pending)}
+.btn-a{background:var(--progress);color:#fff}
+
+/* fields */
+.fl{margin-bottom:10px}
+.fl-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:3px}
+.fl-inp{width:100%;border:1.5px solid #e4e4e7;border-radius:8px;padding:8px 10px;font-size:11px;color:var(--black);background:#fafafa}
+.fl-inp.on{border-color:var(--black);background:#fff}
+.fl-hint{font-size:8px;color:#aaa;margin-top:3px;line-height:1.4}
+
+/* steps */
+.steps{display:flex;gap:4px;justify-content:center;margin-bottom:14px}
+.sd{width:6px;height:6px;border-radius:50%;background:#e4e4e7}
+.sd.on{background:var(--black);width:18px;border-radius:3px}
+
+/* app bar */
+.ab{background:var(--black);padding:13px 16px;display:flex;align-items:center;justify-content:space-between}
+.ab-t{font-size:16px;font-weight:900;color:#fff;letter-spacing:-0.5px}
+.ab-s{font-size:9px;color:#555;margin-top:1px}
+.ab-r{display:flex;align-items:center;gap:10px}
+
+/* badges */
+.badge{display:inline-block;border-radius:20px;padding:2px 8px;font-size:9px;font-weight:700}
+.bv2{background:#f5f3ff;color:#7c3aed}
+.bnew{background:var(--pbg);color:var(--pending)}
+
+/* queue tabs */
+.qt{display:flex;border-bottom:2px solid #f0f0f0;margin-bottom:16px}
+.qtb{padding:9px 14px;font-size:11px;font-weight:700;color:#aaa;cursor:pointer;position:relative;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.qtb.on{color:var(--black)}
+.qtb.on::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--black)}
+.qc{border-radius:10px;padding:1px 6px;font-size:8px;font-weight:800;background:#f0f0f0;color:#888}
+.qtb.on .qc{background:var(--black);color:#fff}
+.qc-h{background:var(--pending)!important;color:#fff!important}
+.qc-a{background:var(--progress)!important;color:#fff!important}
+.qc-g{background:var(--ready)!important;color:#fff!important}
+
+/* order grid */
+.og{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.oc{border-radius:12px;padding:14px 12px;cursor:pointer;border:1.5px solid #e4e4e7;background:#fff;position:relative;overflow:hidden}
+.oc:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.oc.p{border-color:var(--pending);background:var(--pbg)}
+.oc.a{border-color:var(--progress);background:var(--abg)}
+.oc.g{border-color:var(--ready);background:var(--gbg)}
+.oc.d{background:var(--g100);opacity:.7}
+.on-num{font-size:28px;font-weight:900;color:var(--black);line-height:1;margin-bottom:4px;letter-spacing:-1px}
+.oc.p .on-num{color:var(--pending)}
+.oc.a .on-num{color:var(--amber)}
+.oc.g .on-num{color:var(--ready)}
+.o-dn{font-size:12px;font-weight:700;color:var(--black);margin-bottom:2px}
+.o-pv{font-size:9px;color:#888}
+.o-tm{font-size:8px;color:#aaa;margin-top:4px}
+.o-tm.h{color:var(--pending);font-weight:700}
+.nbg{position:absolute;top:8px;right:8px;background:var(--pending);color:#fff;font-size:7px;font-weight:800;border-radius:4px;padding:2px 5px}
+.smsbg{position:absolute;top:8px;right:8px;background:var(--ready);color:#fff;font-size:7px;font-weight:800;border-radius:4px;padding:2px 5px}
+
+/* modal */
+.mb{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;border-radius:10px}
+.mo{background:#fff;border-radius:16px;padding:20px;width:340px;max-width:90%}
+.mo-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.mo-n{font-size:28px;font-weight:900;color:var(--black);letter-spacing:-1px}
+.mo-d{font-size:14px;font-weight:700;color:var(--black)}
+.mo-x{font-size:18px;color:#ccc;cursor:pointer;line-height:1}
+.mo-il{margin-bottom:14px}
+.mo-i{display:flex;justify-content:space-between;font-size:11px;color:var(--black);padding:4px 0;border-bottom:1px solid #f4f4f5}
+.mo-i:last-child{border-bottom:none}
+.mo-note{font-size:9px;color:var(--amber);padding:3px 0 5px}
+.mo-tot{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--black);padding-top:10px;border-top:2px solid #f0f0f0;margin-bottom:14px}
+.mo-ac{display:flex;flex-direction:column;gap:7px}
+
+/* pause btn */
+.pb-btn{display:flex;align-items:center;gap:8px;background:#fff7ed;border:1.5px solid #fed7aa;border-radius:8px;padding:8px 12px;cursor:pointer;font-size:10px;font-weight:700;color:#9a3412}
+
+/* sound toggle */
+.snd{display:flex;align-items:center;gap:6px;font-size:9px;color:#888}
+.tp{width:30px;height:17px;border-radius:9px;background:var(--black);position:relative;flex-shrink:0;cursor:pointer}
+.tp::after{content:'';position:absolute;right:3px;top:3px;width:11px;height:11px;background:#fff;border-radius:50%}
+.tp.off{background:#e4e4e7}
+.tp.off::after{right:auto;left:3px}
+
+/* category/item rows */
+.cr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f4f4f5;cursor:pointer}
+.cn{font-size:12px;font-weight:700;color:var(--black)}
+.cm{font-size:9px;color:#aaa;margin-left:6px}
+.cc{font-size:12px;color:#ccc}
+.ir{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid #f9f9f9}
+.ith{width:38px;height:38px;border-radius:8px;background:#f4f4f5;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ii{flex:1}
+.in{font-size:11px;font-weight:700;color:var(--black)}
+.id{font-size:9px;color:#aaa;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.ip{font-size:11px;font-weight:700;color:var(--black);flex-shrink:0}
+.ia{width:24px;height:24px;border-radius:50%;background:var(--black);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;flex-shrink:0;cursor:pointer}
+.mt{width:26px;height:15px;border-radius:8px;background:var(--black);position:relative;flex-shrink:0}
+.mt::after{content:'';position:absolute;right:3px;top:2.5px;width:10px;height:10px;background:#fff;border-radius:50%}
+.mt.off{background:#e4e4e7}
+.mt.off::after{right:auto;left:3px}
+
+/* cart */
+.cbar{background:var(--black);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.cbdg{background:#fff;color:var(--black);border-radius:50%;width:20px;height:20px;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.cbl{font-size:11px;font-weight:700;color:#fff;margin-left:8px}
+.cbt{font-size:12px;font-weight:800;color:#fff}
+
+/* wait/throttle banners */
+.wb{background:#fff7ed;border-bottom:1px solid #fed7aa;padding:8px 16px;display:flex;align-items:center;gap:8px}
+.wt{font-size:10px;color:#9a3412;font-weight:600}
+.thb{background:var(--pbg);border-bottom:1px solid #fecaca;padding:10px 16px;text-align:center}
+
+/* discovery */
+.dh{background:var(--black);padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.dl{font-size:20px;font-weight:900;color:#fff;letter-spacing:-1px}
+.lb{background:#f4f4f5;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #e4e4e7}
+.ld{width:8px;height:8px;border-radius:50%;background:var(--black);flex-shrink:0}
+.lt{font-size:10px;font-weight:600;color:var(--black);flex:1}
+.lc{font-size:9px;color:#aaa}
+.vl{padding:10px 14px}
+.vlc{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.vr{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4f5;cursor:pointer}
+.vr:last-child{border-bottom:none}
+.vi{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.vn{font-size:12px;font-weight:700;color:var(--black);flex:1}
+.vd{font-size:10px;color:#aaa}
+.vc{font-size:11px;color:#d4d4d8}
+.zb{background:var(--black);padding:9px 14px;display:flex;align-items:center;gap:8px}
+.zi{flex:1;font-size:14px;font-weight:700;color:#fff;background:transparent;border:none;letter-spacing:2px}
+
+/* restaurant hero */
+.rh{height:80px;background:var(--black);position:relative;display:flex;align-items:flex-end;padding:10px 14px}
+.rhe{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.5}
+.rhn{font-size:14px;font-weight:800;color:#fff;position:relative}
+.rhm{font-size:9px;color:rgba(255,255,255,.5);position:relative}
+
+/* install */
+.ib{background:var(--black);padding:7px 14px;display:flex;align-items:center;justify-content:space-between}
+.it{font-size:9px;color:#666}
+.ib-btn{font-size:9px;font-weight:700;color:#fff;background:transparent;border:1px solid #444;border-radius:4px;padding:3px 8px;cursor:pointer}
+
+/* onboarding */
+.obh{background:var(--black);padding:14px 16px;text-align:center}
+.obl{font-size:18px;font-weight:900;color:#fff;letter-spacing:-1px}
+.obb{padding:16px}
+.obt{font-size:13px;font-weight:800;color:var(--black);margin-bottom:5px}
+.obd{font-size:10px;color:#666;line-height:1.5;margin-bottom:14px}
+.qz{border:2px dashed #e4e4e7;border-radius:12px;height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
+.uz{border:2px dashed #e4e4e7;border-radius:10px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:4px;background:#fafafa;margin-bottom:10px}
+
+/* menu builder */
+.ao{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px}
+.aoi{border:1.5px dashed #d4d4d8;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer}
+.aot{font-size:10px;font-weight:700;color:var(--black);margin-bottom:2px}
+.aos{font-size:8px;color:#888;line-height:1.4}
+.mst{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid #f0f0f0}
+
+/* AI box */
+.aib{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+.aibg{font-size:8px;font-weight:800;color:#16a34a;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.aibt{font-size:9px;color:#166534;line-height:1.4}
+
+/* confirm */
+.ch{background:var(--black);padding:20px 16px;text-align:center}
+.ci{font-size:28px;margin-bottom:6px}
+.ct{font-size:16px;font-weight:900;color:#fff}
+.cs{font-size:10px;color:#555;margin-top:2px}
+.cc2{background:#fafafa;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.cr2{display:flex;justify-content:space-between;align-items:center;padding:3px 0}
+.crl{font-size:8px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.crv{font-size:11px;font-weight:700;color:var(--black)}
+.crv.big{font-size:22px;font-weight:900}
+.smsb{background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:9px 12px;display:flex;gap:7px}
+.smst{font-size:9px;color:#166534;line-height:1.5}
+
+/* feedback */
+.stars{display:flex;gap:4px;justify-content:center;margin:10px 0}
+.star{font-size:22px;cursor:pointer}
+
+/* notif */
+.npc{background:#1c1c1e;border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.npar{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+.npai{width:20px;height:20px;background:var(--black);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px}
+.npan{font-size:9px;color:#666}
+.nptt{font-size:11px;font-weight:700;color:#fff}
+.npbt{font-size:10px;color:#888}
+
+/* empty state */
+.es{padding:18px 16px}
+.esi{font-size:28px;text-align:center;margin-bottom:8px}
+.est{font-size:13px;font-weight:800;color:var(--black);text-align:center;margin-bottom:5px}
+.esd{font-size:10px;color:#888;text-align:center;line-height:1.5;margin-bottom:14px}
+.pc{background:var(--black);border-radius:12px;padding:14px;margin-bottom:8px}
+.pe{font-size:8px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.ph{font-size:12px;font-weight:800;color:#fff;margin-bottom:3px;line-height:1.4}
+.psu{font-size:9px;color:#666;margin-bottom:10px}
+.pb2{width:100%;background:#fff;color:var(--black);border:none;border-radius:8px;padding:8px;font-size:10px;font-weight:800;cursor:pointer}
+.sr{display:flex;gap:7px}
+.srb{flex:1;background:#fafafa;border:1px solid #e4e4e7;border-radius:8px;padding:8px;font-size:9px;color:#555;font-weight:700;cursor:pointer;text-align:center}
+
+/* analytics */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sc{background:#fafafa;border:1px solid #e4e4e7;border-radius:10px;padding:12px 14px}
+.sv{font-size:24px;font-weight:900;color:var(--black);letter-spacing:-1px}
+.sl{font-size:9px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.sd2{font-size:9px;color:var(--ready);margin-top:4px;font-weight:700}
+.hc{height:28px;border-radius:4px;background:#f4f4f5;display:flex;align-items:center;justify-content:center;font-size:8px;color:#aaa}
+.hc.l1{background:#dcfce7;color:#16a34a}
+.hc.l2{background:#86efac;color:#15803d}
+.hc.l3{background:#22c55e;color:#fff}
+.hc.l4{background:#16a34a;color:#fff}
+.hc.l5{background:#15803d;color:#fff}
+.ic{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.it2{font-size:11px;font-weight:700;color:#9a3412;margin-bottom:2px}
+.ib2{font-size:9px;color:#c2410c;line-height:1.5}
+
+/* payout */
+.bh{background:var(--black);border-radius:12px;padding:18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.blbl{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.bamt{font-size:30px;font-weight:900;color:#fff;letter-spacing:-1.5px}
+.bsub{font-size:9px;color:#444;margin-top:4px}
+.cob{background:#fff;color:var(--black);border:none;border-radius:10px;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.tr{border:1px solid #f0f0f0;border-radius:8px;overflow:hidden;margin-bottom:8px}
+.trh{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fafafa;cursor:pointer}
+.trd{font-size:11px;font-weight:700;color:var(--black)}
+.trt{font-size:9px;color:#888}
+.tra{font-size:13px;font-weight:800;color:var(--black)}
+.trc{font-size:10px;color:#ccc;margin-left:6px}
+.trd2{padding:10px 14px;border-top:1px solid #f0f0f0}
+.trl{display:flex;justify-content:space-between;font-size:10px;color:#888;padding:3px 0;border-bottom:1px solid #f9f9f9}
+.trl.net{font-weight:800;color:var(--black);font-size:11px;padding-top:7px;border-top:1.5px solid #e4e4e7;margin-top:4px}
+
+/* settings */
+.ss{margin-bottom:20px}
+.sst{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #f0f0f0}
+.sr2{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f9f9f9}
+.sr2:last-child{border-bottom:none}
+.slbl{font-size:11px;font-weight:600;color:var(--black)}
+.ssub{font-size:9px;color:#888;margin-top:1px}
+.sval{font-size:11px;color:#888}
+.ni2{border:1.5px solid #e4e4e7;border-radius:6px;padding:5px 8px;font-size:11px;width:64px;text-align:center;color:var(--black)}
+.ps2{display:flex;gap:8px;padding:8px 0}
+.psl{flex:1;border:1.5px dashed #d4d4d8;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer}
+.psl.f{border-style:solid;border-color:var(--black);background:#fafafa}
+.psi{font-size:18px;margin-bottom:3px}
+.pslt{font-size:9px;font-weight:700;color:var(--black)}
+.psls{font-size:8px;color:#aaa}
+
+/* mobile queue */
+.moc{border-radius:12px;padding:13px 14px;margin:0 10px 8px;cursor:pointer;border:1.5px solid #e4e4e7}
+.moc.p{border-color:var(--pending);background:var(--pbg)}
+.moc.a{border-color:var(--progress);background:var(--abg)}
+.moc.g{border-color:var(--ready);background:var(--gbg)}
+.moch{display:flex;align-items:center;gap:10px}
+.mon{font-size:22px;font-weight:900;color:var(--black);min-width:44px}
+.mon.p{color:var(--pending)}.mon.a{color:var(--amber)}.mon.g{color:var(--ready)}
+.mom{flex:1}
+.modn{font-size:12px;font-weight:700;color:var(--black)}
+.mop{font-size:9px;color:#888;margin-top:1px}
+.mot{font-size:9px;color:#aaa}
+.mot.h{color:var(--pending);font-weight:700}
+
+/* bottom bar */
+.bb{background:#fff;border-top:1px solid #f0f0f0;display:flex;border-radius:0 0 20px 20px}
+.bt{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 4px;cursor:pointer;position:relative}
+.bt.on .bti{color:var(--black)}
+.bt.on .btl{color:var(--black);font-weight:700}
+.bti{font-size:18px;color:#d4d4d8}
+.btl{font-size:8px;color:#a1a1aa;margin-top:2px}
+.btd{position:absolute;top:5px;right:18px;width:8px;height:8px;background:var(--pending);border-radius:50%;border:1.5px solid #fff}
+
+/* throttle */
+.thmod{background:#fff;border-radius:16px;margin:14px;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.thmod-t{font-size:14px;font-weight:900;color:var(--black);margin-bottom:5px}
+.thmod-d{font-size:10px;color:#666;line-height:1.5;margin-bottom:14px}
+.wb2{display:inline-block;background:var(--pbg);border:1px solid var(--pending);color:var(--pending);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:800;margin-bottom:14px}
+.qpb{background:#f0f0f0;border-radius:4px;height:6px;margin-bottom:6px;overflow:hidden}
+.qpf{height:100%;border-radius:4px;background:var(--pending);width:75%}
+
+/* ready screen */
+.rdh{background:var(--black);padding:16px;text-align:center}
+.rdi{font-size:32px;margin-bottom:6px}
+.rdt{font-size:15px;font-weight:900;color:#fff}
+.rds{font-size:10px;color:#555;margin-top:2px}
+.pkc{background:var(--black);border-radius:12px;padding:14px;text-align:center;margin-bottom:10px}
+.pkl{font-size:8px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.pkn{font-size:40px;font-weight:900;color:#fff;letter-spacing:-2px}
+.pkna{font-size:11px;color:#666;margin-top:3px}
+.rc{background:#fafafa;border-radius:10px;padding:10px 12px}
+.rct{font-size:8px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px}
+.rci{font-size:10px;color:var(--black);padding:3px 0;border-bottom:1px solid #f0f0f0}
+.rci:last-child{border-bottom:none}
+
+/* manual order */
+.mir{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f9f9f9}
+.min{font-size:11px;color:var(--black);flex:1}
+.miq{width:22px;height:22px;border-radius:50%;background:var(--black);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+<nav class="doc-nav">
+  <span class="logo">QOA</span>
+  <a href="#discovery">Discovery</a>
+  <a href="#onboarding">Onboarding</a>
+  <a href="#menu">Menu Builder</a>
+  <a href="#diner">Diner Flow</a>
+  <a href="#queue">Queue Desktop</a>
+  <a href="#queue-mobile">Queue Mobile</a>
+  <a href="#analytics">Analytics</a>
+  <a href="#payouts">Payouts</a>
+  <a href="#settings">Settings</a>
+</nav>
+
+<!-- DISCOVERY -->
+<section class="section" id="discovery">
+<div class="section-label">Surface — Diner</div>
+<div class="section-title">getqoa.com — Discovery</div>
+<div class="section-desc">Entry for diners who haven't scanned a QR. Geolocation by default. ZIP fallback via 🔍 icon. Tap vendor → /[slug]. Empty state doubles as owner acquisition.</div>
+<div class="screens-row">
+
+<div class="phone"><div class="screen-label">1. Location permission</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="dh"><div class="dl">QOA</div><div style="font-size:9px;color:#555;">For owners ›</div></div>
+  <div style="padding:20px 16px;">
+    <div style="text-align:center;font-size:28px;margin-bottom:10px;">📍</div>
+    <div style="font-size:13px;font-weight:800;color:#18181b;text-align:center;margin-bottom:5px;">Find spots near you</div>
+    <div style="font-size:10px;color:#888;text-align:center;line-height:1.5;margin-bottom:16px;">QOA shows nearby vendors. No account needed.</div>
+    <button class="btn btn-d">Use My Location</button>
+    <button class="btn btn-o">Enter a ZIP instead</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">2. Results (SoMa)</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="dh"><div class="dl">QOA</div><div style="font-size:16px;color:#666;">🔍</div></div>
+  <div class="lb"><div class="ld"></div><div class="lt">SoMa, San Francisco</div><div class="lc">change</div></div>
+  <div class="vl">
+    <div class="vlc">5 spots nearby</div>
+    <div class="vr"><div class="vi">🌮</div><div class="vn">Papito Mexican Food</div><div class="vd">0.2 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🕯️</div><div class="vn">Annie's Candle Shop</div><div class="vd">0.4 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🧋</div><div class="vn">Japantown Boba Co.</div><div class="vd">0.6 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🥪</div><div class="vn">The Deli on 6th</div><div class="vd">0.7 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🚚</div><div class="vn">Smoke &amp; Spice BBQ</div><div class="vd">0.9 mi</div><div class="vc">›</div></div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">3. ZIP fallback</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="dh"><div class="dl">QOA</div></div>
+  <div class="zb"><div style="font-size:13px;color:#666;">🔍</div><div class="zi">94103</div><div style="font-size:12px;color:#555;cursor:pointer;">✕</div></div>
+  <div class="vl">
+    <div class="vlc">5 spots in 94103</div>
+    <div class="vr"><div class="vi">🌮</div><div class="vn">Papito Mexican Food</div><div class="vd">0.2 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🕯️</div><div class="vn">Annie's Candle Shop</div><div class="vd">0.4 mi</div><div class="vc">›</div></div>
+    <div class="vr"><div class="vi">🧋</div><div class="vn">Japantown Boba Co.</div><div class="vd">0.6 mi</div><div class="vc">›</div></div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">4. Empty state / promo</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="dh"><div class="dl">QOA</div><div style="font-size:16px;color:#666;">🔍</div></div>
+  <div class="lb"><div class="ld"></div><div class="lt">Fresno, CA</div><div class="lc">change</div></div>
+  <div class="es">
+    <div class="esi">🗺️</div>
+    <div class="est">Not here yet</div>
+    <div class="esd">No QOA vendors near you. Know a shop that should be here?</div>
+    <div class="pc">
+      <div class="pe">For business owners</div>
+      <div class="ph">They order. They pay. You just cook.</div>
+      <div class="psu">Free to start. 1.5% per transaction. No hardware.</div>
+      <button class="pb2">Add Your Business →</button>
+    </div>
+    <div class="sr"><div class="srb">📲 Share QOA</div><div class="srb">📩 Tell a vendor</div></div>
+  </div>
+</div></div></div>
+
+</div>
+</section>
+
+<!-- ONBOARDING -->
+<section class="section" id="onboarding">
+<div class="section-label">Surface — Owner</div>
+<div class="section-title">Owner Onboarding</div>
+<div class="section-desc">5-step flow from QR scan (postcard) or organic URL. Step 5 on mobile prompts push notification permission — required for order alerts when phone is locked.</div>
+<div class="screens-row">
+
+<div class="phone"><div class="screen-label">1. Entry</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div class="obl">QOA</div><div style="font-size:9px;color:#555;margin-top:2px;">QR Ordering for your business</div></div>
+  <div class="obb">
+    <div class="qz"><div style="font-size:28px;">⬛</div><div style="font-size:9px;color:#888;">Scan to get started</div></div>
+    <div style="text-align:center;font-size:9px;color:#aaa;margin:8px 0;">— or —</div>
+    <div class="fl"><div class="fl-lbl">Your URL</div><div class="fl-inp" style="color:#aaa;font-size:9px;">getqoa.com/join/yourbusiness</div></div>
+    <button class="btn btn-d">Get Started Free</button>
+    <button class="btn btn-o">See how it works</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">2. Business info</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div class="obl">QOA</div></div>
+  <div class="obb">
+    <div class="steps"><div class="sd on"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div></div>
+    <div class="obt">Tell us about your business</div>
+    <div class="obd">What customers see when they scan your QR.</div>
+    <div class="fl"><div class="fl-lbl">Business Name</div><div class="fl-inp on">Japantown Boba Co.</div></div>
+    <div class="fl"><div class="fl-lbl">Type</div><div class="fl-inp" style="color:#aaa;">Food Truck ▾</div></div>
+    <div class="fl"><div class="fl-lbl">Your URL</div><div class="fl-inp" style="font-size:9px;color:#aaa;">getqoa.com/<strong style="color:#18181b;">japantown-boba</strong></div></div>
+    <button class="btn btn-d">Continue →</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">3. Photo / logo</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div class="obl">QOA</div></div>
+  <div class="obb">
+    <div class="steps"><div class="sd"></div><div class="sd on"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div></div>
+    <div class="obt">Add a photo</div>
+    <div class="obd">Page header and home screen icon.</div>
+    <div class="uz" style="height:80px;"><div style="font-size:22px;">📷</div><div style="font-size:9px;color:#888;">Take a photo or upload logo</div></div>
+    <button class="btn btn-d">Take Photo</button>
+    <button class="btn btn-o">Upload from Library</button>
+    <button class="btn" style="color:#aaa;background:transparent;">Skip for now</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">4. Payout setup</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div class="obl">QOA</div></div>
+  <div class="obb">
+    <div class="steps"><div class="sd"></div><div class="sd"></div><div class="sd on"></div><div class="sd"></div><div class="sd"></div></div>
+    <div class="obt">Where do we send your money?</div>
+    <div class="obd">Auto-deposits every night. Cash out anytime.</div>
+    <div class="fl"><div class="fl-lbl">Bank or Debit Card</div><div class="fl-inp" style="color:#aaa;">Connect via Stripe ›</div></div>
+    <div style="background:#fafafa;border:1px solid #e4e4e7;border-radius:8px;padding:9px;margin-bottom:10px;font-size:8px;color:#888;line-height:1.5;">1.5% per transaction. No monthly fees. Auto-deposit at 11pm nightly.</div>
+    <button class="btn btn-d">Connect Payout →</button>
+    <button class="btn btn-o">Set up later</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">5. Allow notifications (mobile)</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div class="obl">QOA</div></div>
+  <div class="obb">
+    <div class="steps"><div class="sd"></div><div class="sd"></div><div class="sd"></div><div class="sd"></div><div class="sd on"></div></div>
+    <div class="obt">Never miss an order</div>
+    <div class="obd">Allow notifications so QOA can alert you the moment a new order arrives — even when your screen is off.</div>
+    <div class="npc">
+      <div class="npar"><div class="npai">🌮</div><div class="npan">QOA · Papito Mexican Food</div></div>
+      <div class="nptt">🔔 New order — #47 Marcus</div>
+      <div class="npbt">Carne Asada × 2 · $12.50</div>
+    </div>
+    <button class="btn btn-d">Allow Notifications</button>
+    <button class="btn btn-o">Skip for now</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">6. You're live!</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh" style="padding:18px 16px;">
+    <div style="font-size:26px;margin-bottom:6px;">🎉</div>
+    <div class="obl" style="font-size:15px;">You're live!</div>
+    <div style="font-size:9px;color:#555;margin-top:2px;">Japantown Boba Co.</div>
+  </div>
+  <div class="obb">
+    <div style="background:#f4f4f5;border-radius:10px;width:90px;height:90px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888;">QR Code</div>
+    <div style="text-align:center;font-size:9px;color:#888;margin-bottom:12px;">getqoa.com/japantown-boba</div>
+    <button class="btn btn-d">Download QR Code</button>
+    <button class="btn btn-o">Build Your Menu →</button>
+  </div>
+</div></div></div>
+
+</div>
+</section>
+<!-- MENU BUILDER -->
+<section class="section" id="menu">
+<div class="section-label">Surface — Admin</div>
+<div class="section-title">Menu Builder</div>
+<div class="section-desc">Three paths: photo (AI suggests name + description), manual entry, or upload (AI parses PDF/image/spreadsheet). 86'd items shown struck-through with "Sold out today" note.</div>
+
+<div class="dw"><div class="screen-label">Admin — Menu tab (desktop)</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/menu</div></div>
+<div class="ds"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Japantown Boba Co.</div>
+    <div class="ni"><div class="ni-l">📋 Orders</div><div class="nb">3</div></div>
+    <div class="ni on"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Menu Builder</div>
+    <div class="ps"><span>Add, edit, or reorder items.</span></div>
+    <div class="ao">
+      <div class="aoi"><div style="font-size:20px;margin-bottom:4px;">📷</div><div class="aot">Take a Photo</div><div class="aos">AI suggests name + description</div></div>
+      <div class="aoi"><div style="font-size:20px;margin-bottom:4px;">✏️</div><div class="aot">Type It In</div><div class="aos">Name, description, price</div></div>
+      <div class="aoi"><div style="font-size:20px;margin-bottom:4px;">📄</div><div class="aot">Upload Menu</div><div class="aos">PDF, image, or spreadsheet</div></div>
+    </div>
+    <div class="mst">Drinks</div>
+    <div class="ir"><div class="ith">🧋</div><div class="ii"><div class="in">Taro Milk Tea</div><div class="id">Creamy taro, chewy pearls</div></div><div class="ip">$6.50</div><div class="mt"></div><div style="font-size:9px;color:#888;">Edit</div></div>
+    <div class="ir"><div class="ith">🍵</div><div class="ii"><div class="in">Matcha Latte</div><div class="id">Ceremonial grade, oat milk</div></div><div class="ip">$7.00</div><div class="mt"></div><div style="font-size:9px;color:#888;">Edit</div></div>
+    <div style="margin-top:12px;" class="mst">Food</div>
+    <div class="ir"><div class="ith" style="font-size:9px;color:#aaa;">No img</div><div class="ii"><div class="in">Onigiri — Salmon</div><div class="id">Rice triangle, nori</div></div><div class="ip">$4.50</div><div class="mt off"></div><div style="font-size:9px;color:#888;">Edit</div></div>
+  </div>
+</div></div></div></div>
+
+<hr class="sub">
+<div class="sub-title">Add Item — 3 paths</div>
+<div class="screens-row">
+
+<div class="phone"><div class="screen-label">A. Photo → AI suggestion</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div style="font-size:10px;color:#555;">← Menu</div><div class="obl" style="font-size:13px;">Add Item</div></div>
+  <div class="obb">
+    <div style="background:#111;border-radius:8px;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px;">
+      <div style="font-size:26px;">📷</div><div style="font-size:8px;color:#555;margin-top:3px;">Camera preview</div>
+    </div>
+    <div class="aib"><div class="aibg">✨ AI Suggestion</div><div class="aibt"><strong>Taro Milk Tea</strong> — Creamy taro base, chewy tapioca pearls. Customizable sweetness.</div></div>
+    <div class="fl"><div class="fl-lbl">Name</div><div class="fl-inp on">Taro Milk Tea</div></div>
+    <div class="fl"><div class="fl-lbl">Price</div><div class="fl-inp">$6.50</div></div>
+    <button class="btn btn-d">Save Item</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">B. Type it in</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div style="font-size:10px;color:#555;">← Menu</div><div class="obl" style="font-size:13px;">Add Item</div></div>
+  <div class="obb">
+    <div class="fl"><div class="fl-lbl">Item Name</div><div class="fl-inp on">Matcha Lemonade</div></div>
+    <div class="fl"><div class="fl-lbl">Description</div><div class="fl-inp" style="height:46px;padding-top:5px;">Ceremonial matcha, fresh lemon</div></div>
+    <div class="fl"><div class="fl-lbl">Price</div><div class="fl-inp">$6.00</div></div>
+    <div class="fl"><div class="fl-lbl">Category</div><div class="fl-inp" style="color:#aaa;">Drinks ▾</div></div>
+    <div class="uz" style="padding:8px;margin-bottom:8px;"><div style="font-size:13px;">＋ 📷</div><div style="font-size:9px;color:#888;">Add photo (optional)</div></div>
+    <button class="btn btn-d">Save Item</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">C. Upload → AI review</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="obh"><div style="font-size:10px;color:#555;">← Menu</div><div class="obl" style="font-size:13px;">Upload Menu</div></div>
+  <div class="obb">
+    <div class="obd">Upload your existing menu. AI reads it and builds your item list.</div>
+    <div class="uz" style="height:70px;border-color:#18181b;"><div style="font-size:18px;">📄</div><div style="font-size:9px;color:#888;">PDF, image, Excel, Word</div></div>
+    <div style="background:#fafafa;border-radius:8px;padding:10px;margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:800;color:#18181b;margin-bottom:5px;">✅ AI found 8 items</div>
+      <div style="font-size:9px;color:#555;display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #eee;"><span>Taro Milk Tea</span><span style="color:#16a34a;">$6.50 ✓</span></div>
+      <div style="font-size:9px;color:#555;display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #eee;"><span>Matcha Latte</span><span style="color:#16a34a;">$7.00 ✓</span></div>
+      <div style="font-size:9px;color:#f59e0b;display:flex;justify-content:space-between;padding:3px 0;"><span>Brown Sugar Boba</span><span>Price? ⚠️</span></div>
+    </div>
+    <button class="btn btn-d">Review &amp; Confirm All</button>
+  </div>
+</div></div></div>
+
+</div>
+</section>
+
+<!-- DINER FLOW -->
+<section class="section" id="diner">
+<div class="section-label">Surface — Diner</div>
+<div class="section-title">Diner Flow</div>
+<div class="section-desc">Live wait time shown on landing before browsing. Categories collapsed by default (accordion). 86'd items shown struck-through. Queue throttle screen when vendor is at capacity. Free-text special request via ✏️ icon. Feedback on order ready screen.</div>
+<div class="screens-row">
+
+<div class="phone"><div class="screen-label">1. Restaurant landing + wait time</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="rh"><div class="rhe">🌮</div><div><div class="rhn">Papito Mexican Food</div><div class="rhm">The Mission · Open now</div></div></div>
+  <div class="ib"><div class="it">Add Papito to your home screen</div><div class="ib-btn">Add</div></div>
+  <div class="wb"><div style="font-size:14px;">⏱</div><div class="wt">~12 min wait · 4 orders ahead</div></div>
+  <div class="cr"><div><span class="cn">Tacos</span><span class="cm">6 items</span></div><div class="cc">›</div></div>
+  <div class="cr"><div><span class="cn">Burritos</span><span class="cm">4 items</span></div><div class="cc">›</div></div>
+  <div class="cr"><div><span class="cn">Drinks</span><span class="cm">3 items</span></div><div class="cc">›</div></div>
+  <div class="cr"><div><span class="cn">Sides</span><span class="cm">3 items</span></div><div class="cc">›</div></div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">2. Category expanded + 86'd item</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="rh" style="height:50px;padding:8px 14px;"><div class="rhe" style="font-size:18px;opacity:.4;">🌮</div><div><div class="rhn" style="font-size:12px;">Papito Mexican Food</div></div></div>
+  <div class="wb"><div style="font-size:14px;">⏱</div><div class="wt">~12 min wait · 4 orders ahead</div></div>
+  <div class="cr" style="background:#fafafa;"><div><span class="cn">Tacos</span><span class="cm">6 items</span></div><div class="cc" style="transform:rotate(90deg);">›</div></div>
+  <div style="padding:0 16px 8px;background:#fafafa;">
+    <div class="ir" style="padding:8px 0;"><div class="ith">🥩</div><div class="ii"><div class="in">Carne Asada</div><div class="id">Grilled steak, onion</div></div><div class="ip">$4.50</div><div class="ia">+</div></div>
+    <div class="ir" style="padding:8px 0;"><div class="ith">🐟</div><div class="ii"><div class="in">Fish Taco</div><div class="id">Baja style, crema</div></div><div class="ip">$4.75</div><div class="ia">+</div></div>
+    <div class="ir" style="padding:8px 0;border-bottom:none;">
+      <div class="ith" style="font-size:9px;color:#aaa;">86'd</div>
+      <div class="ii"><div class="in" style="color:#aaa;text-decoration:line-through;">Al Pastor</div><div class="id">Sold out today</div></div>
+      <div class="ip" style="color:#aaa;">$4.50</div>
+    </div>
+  </div>
+  <div class="cr"><div><span class="cn">Burritos</span><span class="cm">4 items</span></div><div class="cc">›</div></div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">3. Item detail + special request</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div style="height:110px;background:#f4f4f5;display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;">
+    🥩
+    <div style="position:absolute;top:10px;left:10px;background:rgba(0,0,0,.4);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;">←</div>
+  </div>
+  <div style="padding:14px 16px;">
+    <div style="font-size:15px;font-weight:900;color:#18181b;margin-bottom:4px;">Carne Asada Taco</div>
+    <div style="font-size:10px;color:#666;line-height:1.5;margin-bottom:12px;">Grilled skirt steak, white onion, cilantro, lime. Two per order.</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <div style="font-size:16px;font-weight:900;color:#18181b;">$4.50</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:26px;height:26px;border:1.5px solid #e4e4e7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;">−</div>
+        <div style="font-size:13px;font-weight:800;">1</div>
+        <div style="width:26px;height:26px;border:1.5px solid #e4e4e7;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;">+</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:9px 0;border-top:1px solid #f0f0f0;margin-bottom:8px;">
+      <div style="font-size:14px;">✏️</div><div style="font-size:10px;color:#aaa;flex:1;">Special request...</div>
+    </div>
+    <div class="fl-inp" style="margin-bottom:12px;color:#888;font-size:10px;height:36px;display:flex;align-items:center;">No onion, extra lime</div>
+    <button class="btn btn-d" style="margin-top:0;">Add to Order · $4.50</button>
+  </div>
+  <div class="cbar" style="margin:0 14px 14px;border-radius:10px;">
+    <div style="display:flex;align-items:center;gap:8px;"><div class="cbdg">2</div><div class="cbl">View Order</div></div>
+    <div class="cbt">$9.00</div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">4. Queue throttle (at capacity)</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="rh"><div class="rhe">🌮</div><div><div class="rhn">Papito Mexican Food</div><div class="rhm">The Mission · Open now</div></div></div>
+  <div style="padding:14px 16px;">
+    <div class="thmod">
+      <div style="font-size:28px;text-align:center;margin-bottom:8px;">⏱</div>
+      <div class="thmod-t" style="text-align:center;">We're in the weeds</div>
+      <div style="text-align:center;margin:8px 0;"><div class="wb2">~22 min wait · 12 orders ahead</div></div>
+      <div class="qpb"><div class="qpf"></div></div>
+      <div style="font-size:8px;color:#aaa;margin-bottom:12px;text-align:center;">Queue at capacity</div>
+      <div class="thmod-d">We're heads down on current orders. You can order now and wait, or check back in a few minutes.</div>
+      <button class="btn btn-d" style="margin-top:0;">Order Anyway</button>
+      <button class="btn btn-o">Check back later</button>
+    </div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">5. Checkout</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="ab"><div style="font-size:14px;color:#666;">←</div><div style="font-size:13px;font-weight:800;color:#fff;">Checkout</div><div></div></div>
+  <div style="padding:14px 16px;">
+    <div style="background:#fafafa;border-radius:8px;padding:10px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;padding:2px 0;"><span>Carne Asada × 2</span><span>$9.00</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#888;padding:2px 0;"><span>Horchata × 1</span><span>$3.50</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#18181b;padding-top:7px;border-top:1.5px solid #e4e4e7;margin-top:5px;"><span>Total</span><span>$12.50</span></div>
+    </div>
+    <div class="fl"><div class="fl-lbl">Your Name</div><div class="fl-inp on">Joe</div></div>
+    <div class="fl"><div class="fl-lbl">Mobile Number</div><div class="fl-inp">(415) 555-0192</div><div class="fl-hint">We'll text you when ready. Nothing else.</div></div>
+    <div class="fl"><div class="fl-lbl">Payment</div><div class="fl-inp" style="display:flex;align-items:center;justify-content:space-between;"><span style="color:#aaa;">Card number</span><span>💳</span></div></div>
+    <button class="btn btn-d" style="margin-top:4px;">Pay $12.50</button>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">6. Confirmation</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="ch"><div class="ci">✅</div><div class="ct">Order placed!</div><div class="cs">Papito Mexican Food</div></div>
+  <div style="padding:14px 16px;">
+    <div class="cc2">
+      <div class="cr2"><div class="crl">Order</div><div class="crv big">#42</div></div>
+      <div class="cr2" style="margin-top:8px;"><div class="crl">Est. wait</div><div class="crv">~14 min</div></div>
+      <div class="cr2"><div class="crl">Total</div><div class="crv">$12.50</div></div>
+    </div>
+    <div class="smsb"><div style="font-size:16px;flex-shrink:0;">💬</div><div class="smst">We'll text <strong>(415) 555-0192</strong> when your order is ready.</div></div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">7. Order ready + feedback</div>
+<div class="phone-frame"><div class="phone-notch"></div><div class="phone-screen s">
+  <div class="rdh"><div class="rdi">🎉</div><div class="rdt">Your order is ready!</div><div class="rds">Papito Mexican Food</div></div>
+  <div style="padding:14px 16px;">
+    <div class="pkc"><div class="pkl">Pick up order</div><div class="pkn">#42</div><div class="pkna">Joe</div></div>
+    <div class="rc" style="margin-bottom:12px;"><div class="rct">Your items</div><div class="rci">Carne Asada Taco × 2 — no onion</div><div class="rci">Horchata × 1</div></div>
+    <div style="background:#fafafa;border-radius:10px;padding:10px 12px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;color:#18181b;margin-bottom:4px;">How was it?</div>
+      <div class="stars"><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star" style="opacity:.3;">⭐</span></div>
+      <textarea style="width:100%;border:1.5px solid #e4e4e7;border-radius:8px;padding:8px 10px;font-size:10px;height:48px;resize:none;color:#18181b;" placeholder="Anything to add?"></textarea>
+      <button class="btn btn-d" style="margin-top:7px;">Send Feedback</button>
+    </div>
+  </div>
+</div></div></div>
+
+</div>
+</section>
+<!-- ORDER QUEUE DESKTOP -->
+<section class="section" id="queue">
+<div class="section-label">Surface — Admin · Desktop</div>
+<div class="section-title">Order Queue — Desktop</div>
+<div class="section-desc">4 tabs: Pending / In Progress / Ready / Done. Each tab = color-coded grid, 4 columns, badge counts update live. Tap any card → modal with full details + action button. One-tap Pause always visible. Sound alert toggle in header. Manual walk-up order entry.</div>
+
+<!-- Pending + modal -->
+<div class="dw"><div class="screen-label">Pending tab — new order, modal open</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/orders</div></div>
+<div class="ds" style="position:relative;"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni on"><div class="ni-l">📋 Orders</div><div class="nb">4</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Orders</div>
+    <div class="ps"><span>Today · 14 orders so far</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="pb-btn">⏸ Pause ordering</div>
+        <div class="snd"><span>🔊</span><div class="tp"></div></div>
+      </div>
+    </div>
+    <div class="qt">
+      <div class="qtb on">Pending <span class="qc qc-h">4</span></div>
+      <div class="qtb">In Progress <span class="qc qc-a">2</span></div>
+      <div class="qtb">Ready <span class="qc qc-g">1</span></div>
+      <div class="qtb">Done <span class="qc">8</span></div>
+    </div>
+    <div class="og">
+      <div class="oc p"><div class="nbg">NEW</div><div class="on-num">#47</div><div class="o-dn">Marcus</div><div class="o-pv">Carne Asada × 2, Horchata</div><div class="o-tm h">just now</div></div>
+      <div class="oc p"><div class="on-num">#46</div><div class="o-dn">Priya</div><div class="o-pv">Fish Taco × 1, Al Pastor × 2</div><div class="o-tm">2m ago</div></div>
+      <div class="oc p"><div class="on-num">#45</div><div class="o-dn">Derek</div><div class="o-pv">Burrito × 1</div><div class="o-tm">4m ago</div></div>
+      <div class="oc p"><div class="on-num">#44</div><div class="o-dn">Keisha</div><div class="o-pv">Chips × 2, Horchata</div><div class="o-tm">5m ago</div></div>
+    </div>
+  </div>
+</div>
+<div class="mb"><div class="mo">
+  <div class="mo-h"><div><div class="mo-n">#47</div><div class="mo-d">Marcus</div></div><div class="mo-x">✕</div></div>
+  <div class="mo-il">
+    <div class="mo-i"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+    <div class="mo-note">✏️ No onion, extra lime</div>
+    <div class="mo-i"><span>Horchata × 1</span><span>$3.50</span></div>
+  </div>
+  <div class="mo-tot"><span>Total</span><span>$12.50</span></div>
+  <div class="mo-ac">
+    <button class="btn btn-d" style="margin-top:0;">Start Order →</button>
+    <button class="btn btn-r">Cancel Order</button>
+  </div>
+</div></div>
+</div></div></div>
+
+<!-- In Progress + modal -->
+<div class="dw"><div class="screen-label">In Progress tab — modal with back-step</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/orders</div></div>
+<div class="ds" style="position:relative;"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni on"><div class="ni-l">📋 Orders</div><div class="nb">3</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Orders</div>
+    <div class="ps"><span>Today · 15 orders so far</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="pb-btn">⏸ Pause ordering</div>
+        <div class="snd"><span>🔊</span><div class="tp"></div></div>
+      </div>
+    </div>
+    <div class="qt">
+      <div class="qtb">Pending <span class="qc qc-h">3</span></div>
+      <div class="qtb on">In Progress <span class="qc qc-a">2</span></div>
+      <div class="qtb">Ready <span class="qc qc-g">1</span></div>
+      <div class="qtb">Done <span class="qc">9</span></div>
+    </div>
+    <div class="og">
+      <div class="oc a"><div class="on-num">#47</div><div class="o-dn">Marcus</div><div class="o-pv">Carne Asada × 2, Horchata</div><div class="o-tm">6m ago</div></div>
+      <div class="oc a"><div class="on-num">#46</div><div class="o-dn">Priya</div><div class="o-pv">Fish Taco × 1, Al Pastor × 2</div><div class="o-tm">8m ago</div></div>
+    </div>
+  </div>
+</div>
+<div class="mb"><div class="mo">
+  <div class="mo-h"><div><div class="mo-n" style="color:var(--amber);">#47</div><div class="mo-d">Marcus</div></div><div class="mo-x">✕</div></div>
+  <div class="mo-il">
+    <div class="mo-i"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+    <div class="mo-note">✏️ No onion, extra lime</div>
+    <div class="mo-i"><span>Horchata × 1</span><span>$3.50</span></div>
+  </div>
+  <div class="mo-tot"><span>Total</span><span>$12.50</span></div>
+  <div class="mo-ac">
+    <button class="btn btn-d" style="margin-top:0;">Mark Ready → SMS sent</button>
+    <button class="btn btn-o">← Back to Pending</button>
+  </div>
+</div></div>
+</div></div></div>
+
+<!-- Ready + modal -->
+<div class="dw"><div class="screen-label">Ready tab — Mark Done + back-step to In Progress</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/orders</div></div>
+<div class="ds" style="position:relative;"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni on"><div class="ni-l">📋 Orders</div><div class="nb">2</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Orders</div>
+    <div class="ps"><span>Today · 16 orders so far</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="pb-btn">⏸ Pause ordering</div>
+        <div class="snd"><span>🔊</span><div class="tp"></div></div>
+      </div>
+    </div>
+    <div class="qt">
+      <div class="qtb">Pending <span class="qc qc-h">2</span></div>
+      <div class="qtb">In Progress <span class="qc qc-a">1</span></div>
+      <div class="qtb on">Ready <span class="qc qc-g">1</span></div>
+      <div class="qtb">Done <span class="qc">12</span></div>
+    </div>
+    <div class="og">
+      <div class="oc g"><div class="smsbg">SMS ✓</div><div class="on-num">#42</div><div class="o-dn">Joe</div><div class="o-pv">Carne Asada × 2, Horchata</div><div class="o-tm">SMS 1m ago</div></div>
+    </div>
+  </div>
+</div>
+<div class="mb"><div class="mo" style="border-top:3px solid var(--ready);">
+  <div class="mo-h"><div><div class="mo-n" style="color:var(--ready);">#42</div><div class="mo-d">Joe</div></div><div class="mo-x">✕</div></div>
+  <div class="mo-il">
+    <div class="mo-i"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+    <div class="mo-i"><span>Horchata × 1</span><span>$3.50</span></div>
+  </div>
+  <div style="font-size:9px;color:var(--ready);margin-bottom:10px;">✅ SMS sent to (415) 555-0192 · 1m ago</div>
+  <div class="mo-tot"><span>Total</span><span>$12.50</span></div>
+  <div class="mo-ac">
+    <button class="btn btn-g" style="margin-top:0;">Mark Done ✓</button>
+    <button class="btn btn-o">← Back to In Progress</button>
+  </div>
+</div></div>
+</div></div></div>
+
+<!-- Manual order -->
+<div class="dw"><div class="screen-label">＋ Manual / walk-up order entry</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/orders</div></div>
+<div class="ds" style="position:relative;"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni on"><div class="ni-l">📋 Orders</div><div class="nb">3</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Orders</div>
+    <div class="ps"><span>Today · 14 orders so far</span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="pb-btn">⏸ Pause ordering</div>
+        <div class="snd"><span>🔊</span><div class="tp"></div></div>
+      </div>
+    </div>
+    <div class="qt">
+      <div class="qtb on">Pending <span class="qc qc-h">3</span></div>
+      <div class="qtb">In Progress <span class="qc qc-a">2</span></div>
+      <div class="qtb">Ready <span class="qc qc-g">1</span></div>
+      <div class="qtb">Done <span class="qc">8</span></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <button style="background:var(--black);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;cursor:pointer;">＋ Manual Order</button>
+    </div>
+    <div class="og">
+      <div class="oc p"><div class="on-num">#47</div><div class="o-dn">Marcus</div><div class="o-pv">Carne Asada × 2</div><div class="o-tm h">just now</div></div>
+      <div class="oc p"><div class="on-num">#46</div><div class="o-dn">Priya</div><div class="o-pv">Fish Taco × 3</div><div class="o-tm">2m</div></div>
+      <div class="oc p"><div class="on-num">#45</div><div class="o-dn">Derek</div><div class="o-pv">Burrito × 1</div><div class="o-tm">4m</div></div>
+    </div>
+  </div>
+</div>
+<div class="mb"><div class="mo">
+  <div class="mo-h"><div><div style="font-size:14px;font-weight:800;color:#18181b;">Walk-up Order</div><div style="font-size:10px;color:#888;">Cash / Venmo / paid separately</div></div><div class="mo-x">✕</div></div>
+  <div class="fl"><div class="fl-lbl">Customer Name</div><div class="fl-inp on">Ana</div></div>
+  <div style="font-size:9px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Items</div>
+  <div class="mir"><div class="min">Carne Asada Taco</div><div class="miq">2</div><div style="font-size:9px;color:#888;">$9.00</div></div>
+  <div class="mir"><div class="min">Horchata</div><div class="miq">1</div><div style="font-size:9px;color:#888;">$3.50</div></div>
+  <div style="font-size:10px;color:#aaa;padding:8px 0;cursor:pointer;">＋ Add another item</div>
+  <div class="mo-ac" style="margin-top:8px;"><button class="btn btn-d" style="margin-top:0;">Add to Queue</button></div>
+</div></div>
+</div></div></div>
+<div class="note">⚠️ Paused state: when owner taps "Pause ordering" diner landing shows throttle screen. Pause button outline turns red. One tap to resume. Queue throttle threshold is set in Settings.</div>
+</section>
+
+<!-- ORDER QUEUE MOBILE -->
+<section class="section" id="queue-mobile">
+<div class="section-label">Surface — Admin · Mobile</div>
+<div class="section-title">Order Queue — Mobile</div>
+<div class="section-desc">Bottom tab bar replaces sidebar. New order = red banner + pulse dot. Horizontal scroll tab strip. Cards are full-width — tap to expand inline (no modal on mobile). Action buttons are large and thumb-reachable at bottom of expanded card. Back-step same as desktop.</div>
+<div class="screens-row">
+
+<div class="phone"><div class="screen-label">Push notification (locked screen)</div>
+<div class="phone-frame"><div class="phone-notch"></div>
+<div class="phone-screen" style="background:#111;min-height:440px;">
+  <div style="padding:20px 14px;text-align:center;">
+    <div style="font-size:10px;color:#444;margin-bottom:4px;">Sunday, May 25</div>
+    <div style="font-size:32px;font-weight:200;color:#fff;">2:14 PM</div>
+  </div>
+  <div style="margin:0 12px;background:#1c1c1e;border-radius:14px;padding:12px 14px;">
+    <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;">
+      <div style="width:20px;height:20px;background:#18181b;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;">🌮</div>
+      <div style="font-size:9px;color:#666;">QOA · Papito Mexican Food</div>
+      <div style="font-size:9px;color:#555;margin-left:auto;">now</div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#fff;">🔔 New order — #47 Marcus</div>
+    <div style="font-size:10px;color:#888;margin-top:2px;">Carne Asada × 2, Horchata · $12.50</div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">Pending — cards list</div>
+<div class="phone-frame"><div class="phone-notch"></div>
+<div class="phone-screen s" style="display:flex;flex-direction:column;">
+  <div class="ab"><div><div class="ab-t">Orders</div><div class="ab-s">Papito Mexican Food</div></div>
+    <div class="ab-r"><div style="font-size:15px;color:#666;">🔊</div><div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:4px 8px;font-size:9px;font-weight:700;color:#9a3412;cursor:pointer;">⏸ Pause</div></div>
+  </div>
+  <div style="background:var(--pbg);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:10px;font-weight:700;color:var(--pending);">🔔 New order — #47 Marcus</div>
+    <div style="width:8px;height:8px;border-radius:50%;background:var(--pending);"></div>
+  </div>
+  <div style="display:flex;overflow-x:auto;border-bottom:2px solid #f0f0f0;">
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#18181b;border-bottom:2px solid #18181b;white-space:nowrap;display:flex;align-items:center;gap:4px;">Pending <span class="qc qc-h">3</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">In Progress <span class="qc qc-a">2</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Ready <span class="qc qc-g">1</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Done <span class="qc">8</span></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;background:#f7f7f7;padding:10px 0;">
+    <div class="moc p"><div class="moch"><div class="mon p">#47</div><div class="mom"><div class="modn">Marcus <span style="background:var(--pending);color:#fff;font-size:7px;font-weight:800;border-radius:3px;padding:1px 4px;margin-left:3px;">NEW</span></div><div class="mop">Carne Asada × 2, Horchata</div></div><div class="mot h">now</div></div></div>
+    <div class="moc p"><div class="moch"><div class="mon p">#46</div><div class="mom"><div class="modn">Priya</div><div class="mop">Fish Taco × 1, Al Pastor × 2</div></div><div class="mot">2m</div></div></div>
+    <div class="moc p"><div class="moch"><div class="mon p">#45</div><div class="mom"><div class="modn">Derek</div><div class="mop">Burrito × 1</div></div><div class="mot">4m</div></div></div>
+  </div>
+  <div class="bb">
+    <div class="bt on"><div class="btd"></div><div class="bti">📋</div><div class="btl">Orders</div></div>
+    <div class="bt"><div class="bti">🍽️</div><div class="btl">Menu</div></div>
+    <div class="bt"><div class="bti">💰</div><div class="btl">Payouts</div></div>
+    <div class="bt"><div class="bti">⚙️</div><div class="btl">Settings</div></div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">Card tapped — expanded inline</div>
+<div class="phone-frame"><div class="phone-notch"></div>
+<div class="phone-screen s" style="display:flex;flex-direction:column;">
+  <div class="ab"><div><div class="ab-t">Orders</div><div class="ab-s">Papito Mexican Food</div></div><div class="ab-r"><div style="font-size:15px;color:#666;">🔊</div></div></div>
+  <div style="display:flex;overflow-x:auto;border-bottom:2px solid #f0f0f0;">
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#18181b;border-bottom:2px solid #18181b;white-space:nowrap;">Pending <span class="qc qc-h">3</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">In Progress <span class="qc qc-a">2</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Ready <span class="qc qc-g">1</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Done <span class="qc">8</span></div>
+  </div>
+  <div style="flex:1;overflow-y:auto;background:#f7f7f7;padding:10px 0;">
+    <div style="margin:0 10px 8px;background:#fff;border:2px solid var(--pending);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--pbg);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+        <div class="mon p" style="font-size:24px;">#47</div>
+        <div class="mom"><div class="modn">Marcus</div><div class="mop">just now</div></div>
+      </div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:11px;color:#18181b;display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f4f4f5;"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+        <div style="font-size:9px;color:var(--amber);padding:2px 0 4px;">✏️ No onion, extra lime</div>
+        <div style="font-size:11px;color:#18181b;display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f4f4f5;"><span>Horchata × 1</span><span>$3.50</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#18181b;padding:8px 0;border-top:2px solid #f0f0f0;margin-top:6px;"><span>Total</span><span>$12.50</span></div>
+        <button class="btn btn-d" style="margin-top:0;">Start Order →</button>
+        <button class="btn btn-r">Cancel</button>
+      </div>
+    </div>
+    <div class="moc p"><div class="moch"><div class="mon p">#46</div><div class="mom"><div class="modn">Priya</div><div class="mop">Fish Taco × 1, Al Pastor × 2</div></div><div class="mot">2m</div></div></div>
+  </div>
+  <div class="bb">
+    <div class="bt on"><div class="btd"></div><div class="bti">📋</div><div class="btl">Orders</div></div>
+    <div class="bt"><div class="bti">🍽️</div><div class="btl">Menu</div></div>
+    <div class="bt"><div class="bti">💰</div><div class="btl">Payouts</div></div>
+    <div class="bt"><div class="bti">⚙️</div><div class="btl">Settings</div></div>
+  </div>
+</div></div></div>
+
+<div class="phone"><div class="screen-label">Ready — back-step available</div>
+<div class="phone-frame"><div class="phone-notch"></div>
+<div class="phone-screen s" style="display:flex;flex-direction:column;">
+  <div class="ab"><div><div class="ab-t">Orders</div><div class="ab-s">Papito Mexican Food</div></div><div class="ab-r"><div style="font-size:15px;color:#666;">🔊</div></div></div>
+  <div style="display:flex;overflow-x:auto;border-bottom:2px solid #f0f0f0;">
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Pending <span class="qc">2</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">In Progress <span class="qc qc-a">1</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#18181b;border-bottom:2px solid #18181b;white-space:nowrap;">Ready <span class="qc qc-g">1</span></div>
+    <div style="padding:9px 12px;font-size:10px;font-weight:700;color:#aaa;white-space:nowrap;">Done <span class="qc">11</span></div>
+  </div>
+  <div style="flex:1;background:#f7f7f7;padding:10px 0;">
+    <div style="margin:0 10px;background:#fff;border:2px solid var(--ready);border-radius:12px;overflow:hidden;">
+      <div style="background:var(--gbg);padding:12px 14px;display:flex;align-items:center;gap:10px;">
+        <div style="font-size:24px;font-weight:900;color:var(--ready);min-width:44px;">#42</div>
+        <div><div class="modn">Joe</div><div style="font-size:9px;color:var(--ready);">SMS sent ✓ · 1m ago</div></div>
+      </div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:11px;color:#18181b;display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f4f4f5;"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+        <div style="font-size:11px;color:#18181b;display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f4f4f5;"><span>Horchata × 1</span><span>$3.50</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#18181b;padding:8px 0;border-top:2px solid #f0f0f0;margin-top:6px;"><span>Total</span><span>$12.50</span></div>
+        <button class="btn btn-g" style="margin-top:0;">Mark Done ✓</button>
+        <button class="btn btn-o">← Back to In Progress</button>
+      </div>
+    </div>
+  </div>
+  <div class="bb">
+    <div class="bt on"><div class="bti">📋</div><div class="btl">Orders</div></div>
+    <div class="bt"><div class="bti">🍽️</div><div class="btl">Menu</div></div>
+    <div class="bt"><div class="bti">💰</div><div class="btl">Payouts</div></div>
+    <div class="bt"><div class="bti">⚙️</div><div class="btl">Settings</div></div>
+  </div>
+</div></div></div>
+
+</div>
+</section>
+
+<!-- ANALYTICS -->
+<section class="section" id="analytics">
+<div class="section-label">Surface — Admin · New</div>
+<div class="section-title">Analytics <span class="badge bnew" style="font-size:11px;vertical-align:middle;">New</span></div>
+<div class="section-desc">Peak hour heatmap, key stats, and AI-generated operational insights. Helps owners identify when rush periods consistently overload capacity and which menu items slow them down during crunch.</div>
+
+<div class="dw"><div class="screen-label">Analytics dashboard</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/analytics</div></div>
+<div class="ds"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni"><div class="ni-l">📋 Orders</div><div class="nb">2</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni on"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Analytics</div>
+    <div class="ps"><span>Last 30 days</span></div>
+    <div class="ag">
+      <div class="sc"><div class="sv">247</div><div class="sl">Total Orders</div><div class="sd2">↑ 18% vs last month</div></div>
+      <div class="sc"><div class="sv">$14.20</div><div class="sl">Avg Order Value</div><div class="sd2">↑ 4% vs last month</div></div>
+      <div class="sc"><div class="sv">11.4m</div><div class="sl">Avg Fulfillment Time</div><div class="sd2" style="color:var(--amber);">↑ 2m during peak</div></div>
+      <div class="sc"><div class="sv">38%</div><div class="sl">Repeat Customers</div><div class="sd2">↑ 6% vs last month</div></div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Peak Hours — Orders by hour</div>
+    <div style="display:grid;grid-template-columns:40px repeat(7,1fr);gap:3px;margin-bottom:16px;">
+      <div></div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Mon</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Tue</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Wed</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Thu</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Fri</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Sat</div>
+      <div style="font-size:8px;color:#888;text-align:center;margin-bottom:4px;">Sun</div>
+      <div style="font-size:8px;color:#888;display:flex;align-items:center;">11am</div>
+      <div class="hc l1">3</div><div class="hc l2">5</div><div class="hc l1">2</div><div class="hc l2">4</div><div class="hc l3">8</div><div class="hc l4">14</div><div class="hc l3">9</div>
+      <div style="font-size:8px;color:#888;display:flex;align-items:center;">12pm</div>
+      <div class="hc l3">9</div><div class="hc l4">12</div><div class="hc l3">10</div><div class="hc l4">13</div><div class="hc l5">18</div><div class="hc l5">22</div><div class="hc l4">16</div>
+      <div style="font-size:8px;color:#888;display:flex;align-items:center;">1pm</div>
+      <div class="hc l2">6</div><div class="hc l3">8</div><div class="hc l2">5</div><div class="hc l3">7</div><div class="hc l4">11</div><div class="hc l5">19</div><div class="hc l4">13</div>
+      <div style="font-size:8px;color:#888;display:flex;align-items:center;">5pm</div>
+      <div class="hc l1">2</div><div class="hc l2">4</div><div class="hc l1">3</div><div class="hc l2">5</div><div class="hc l3">9</div><div class="hc l4">15</div><div class="hc l3">10</div>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Operational Insights</div>
+    <div class="ic"><div class="it2">🔥 Friday &amp; Saturday 12–1pm consistently hits queue limit</div><div class="ib2">For the last 4 weeks, orders exceeded your 10-order threshold during this window. Consider adding help or enabling auto-throttle at 11:45am on Fridays and Saturdays.</div></div>
+    <div class="ic" style="background:var(--blbg);border-color:#93c5fd;"><div class="it2" style="color:var(--blue);">📋 Burrito Supreme takes 3× longer than any other item</div><div class="ib2" style="color:#1d4ed8;">Based on fulfillment times, Burrito Supreme adds ~8 min to those orders. During peak hours consider marking it unavailable or creating a rush-hour limited menu.</div></div>
+    <div class="ic" style="background:var(--tbg);border-color:#5eead4;"><div class="it2" style="color:var(--teal);">⭐ Top 3 items account for 71% of all orders</div><div class="ib2" style="color:#0f766e;">Carne Asada Taco, Horchata, and Fish Taco drive most revenue. Keeping these stocked during rush hours has the highest impact.</div></div>
+  </div>
+</div></div></div></div>
+
+</section>
+
+<!-- PAYOUTS -->
+<section class="section" id="payouts">
+<div class="section-label">Surface — Admin</div>
+<div class="section-title">Payouts</div>
+<div class="section-desc">Available balance, Cash Out Now, and 11pm auto-sweep countdown. Transaction history collapsed — tap to expand per order. Net amounts only.</div>
+
+<div class="dw"><div class="screen-label">Payout dashboard</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/payouts</div></div>
+<div class="ds"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni"><div class="ni-l">📋 Orders</div><div class="nb">2</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni on"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am">
+    <div class="pt">Payouts</div>
+    <div class="ps"><span>Deposits to Visa ···· 4821</span></div>
+    <div class="bh">
+      <div><div class="blbl">Available Balance</div><div class="bamt">$247.50</div><div class="bsub">Auto-deposit in 3h 14m · Next: 11pm tonight</div></div>
+      <button class="cob">Cash Out Now</button>
+    </div>
+    <div style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Transaction History</div>
+    <div class="tr">
+      <div class="trh"><div><div class="trd">Today, May 25</div><div class="trt">Auto-deposit · 11pm sweep</div></div><div style="display:flex;align-items:center;"><div class="tra">$184.20</div><div class="trc" style="transform:rotate(90deg);">›</div></div></div>
+      <div class="trd2">
+        <div class="trl"><span>Order #38 — Marcus</span><span>$12.50</span></div>
+        <div class="trl"><span>Order #39 — Priya</span><span>$18.75</span></div>
+        <div class="trl"><span>Order #40 — Derek</span><span>$9.00</span></div>
+        <div class="trl"><span>+ 9 more orders</span><span>$144.00</span></div>
+        <div class="trl net"><span>Deposited</span><span>$184.20</span></div>
+      </div>
+    </div>
+    <div class="tr"><div class="trh"><div><div class="trd">May 24</div><div class="trt">Manual cash out · 2:14pm</div></div><div style="display:flex;align-items:center;"><div class="tra">$63.30</div><div class="trc">›</div></div></div></div>
+    <div class="tr"><div class="trh"><div><div class="trd">May 23</div><div class="trt">Auto-deposit · 11pm sweep</div></div><div style="display:flex;align-items:center;"><div class="tra">$201.75</div><div class="trc">›</div></div></div></div>
+  </div>
+</div></div></div></div>
+
+</section>
+
+<!-- SETTINGS -->
+<section class="section" id="settings">
+<div class="section-label">Surface — Admin</div>
+<div class="section-title">Settings</div>
+<div class="section-desc">Business info, branding (storefront photo + logo as separate slots), order management with queue throttle threshold and dynamic wait time toggle, loyalty (V2 stub), payout method, and feedback form.</div>
+
+<div class="dw"><div class="screen-label">Settings page</div>
+<div class="df"><div class="dc-bar"><div class="dc dc-r"></div><div class="dc dc-y"></div><div class="dc dc-g"></div><div class="url-pill">getqoa.com/admin/settings</div></div>
+<div class="ds"><div class="al">
+  <div class="sb">
+    <div class="sb-brand">QOA</div><div class="sb-biz">Papito Mexican Food</div>
+    <div class="ni"><div class="ni-l">📋 Orders</div><div class="nb">2</div></div>
+    <div class="ni"><div class="ni-l">🍽️ Menu</div></div>
+    <div class="ni"><div class="ni-l">💰 Payouts</div></div>
+    <div class="ni"><div class="ni-l">📊 Analytics</div></div>
+    <div class="ni on"><div class="ni-l">⚙️ Settings</div></div>
+    <div class="sf"><div class="sf-fb">💬 Send feedback</div></div>
+  </div>
+  <div class="am" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+    <div>
+      <div class="ss">
+        <div class="sst">Business</div>
+        <div class="sr2"><div><div class="slbl">Business Name</div></div><div class="sval">Papito Mexican Food</div></div>
+        <div class="sr2"><div><div class="slbl">Category</div></div><div class="sval">Food Truck ▾</div></div>
+        <div class="sr2"><div><div class="slbl">Your URL</div></div><div class="sval" style="font-size:10px;">getqoa.com/papito</div></div>
+      </div>
+      <div class="ss">
+        <div class="sst">Branding</div>
+        <div class="sr2"><div><div class="slbl">Photo &amp; Logo</div><div class="ssub">Page header and home screen icon</div></div></div>
+        <div class="ps2">
+          <div class="psl f"><div class="psi">🌮</div><div class="pslt">Storefront Photo</div><div class="psls">Tap to replace</div></div>
+          <div class="psl"><div class="psi">＋</div><div class="pslt">Logo</div><div class="psls">Optional</div></div>
+        </div>
+      </div>
+      <div class="ss">
+        <div class="sst">Order Management</div>
+        <div class="sr2"><div><div class="slbl">Est. Wait Time</div><div class="ssub">Fallback if dynamic calc is off</div></div><div style="display:flex;align-items:center;gap:6px;"><input class="ni2" value="12" /><span style="font-size:10px;color:#888;">min</span></div></div>
+        <div class="sr2"><div><div class="slbl">Dynamic Wait Time</div><div class="ssub">Calculated from live queue depth</div></div><div class="tp"></div></div>
+        <div class="sr2"><div><div class="slbl">Queue Throttle Limit</div><div class="ssub">Auto-pause when orders exceed this</div></div><div style="display:flex;align-items:center;gap:6px;"><input class="ni2" value="10" /><span style="font-size:10px;color:#888;">orders</span></div></div>
+        <div class="sr2"><div><div class="slbl">Accept Orders</div><div class="ssub">Manual pause — also in queue view</div></div><div class="tp"></div></div>
+        <div class="sr2"><div><div class="slbl">Shipping</div><div class="ssub">Show shipping at checkout</div></div><div class="tp off"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="ss">
+        <div class="sst">Loyalty <span class="badge bv2">V2</span></div>
+        <div class="sr2"><div><div class="slbl">Buy 10 Get 1 Free</div><div class="ssub">Stamp card per customer, phone-based</div></div><div class="tp off"></div></div>
+      </div>
+      <div class="ss">
+        <div class="sst">Payout</div>
+        <div class="sr2"><div><div class="slbl">Payout Method</div><div class="ssub">Visa ···· 4821</div></div><div class="sval" style="cursor:pointer;color:#18181b;font-weight:600;">Change ›</div></div>
+      </div>
+      <div class="ss">
+        <div class="sst">Send Feedback</div>
+        <div style="background:#fafafa;border-radius:10px;padding:12px 14px;">
+          <div style="font-size:10px;color:#888;margin-bottom:8px;">Bug report, feature request, or just saying hi. We read everything.</div>
+          <textarea style="width:100%;border:1.5px solid #e4e4e7;border-radius:8px;padding:8px 10px;font-size:11px;color:#18181b;height:70px;resize:none;background:#fff;font-family:inherit;" placeholder="What's on your mind..."></textarea>
+          <button class="btn btn-d" style="width:auto;padding:7px 16px;display:inline-block;margin-top:8px;">Send →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></div></div></div>
+
+</section>
+
+<div style="padding:32px;text-align:center;font-size:11px;color:#333;">
+  QOA Wireframe Reference · getqoa.com · May 2026
+</div>
+</body>
+</html>

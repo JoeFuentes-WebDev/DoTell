@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 24px; }
+  h1 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 32px; }
+  .flow-title { font-size: 13px; font-weight: 700; color: #aaa; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #222; margin-top: 40px; }
+  .flow-row { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 48px; flex-wrap: wrap; }
+  .flow-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .arrow { display: flex; align-items: center; padding-top: 44px; color: #444; font-size: 20px; flex-shrink: 0; }
+
+  /* Desktop frame */
+  .desktop-frame { background: #1a1a1a; border: 1.5px solid #333; border-radius: 10px; overflow: hidden; margin-bottom: 40px; }
+  .desktop-titlebar { background: #2a2a2a; padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+  .url-bar { flex: 1; background: #1a1a1a; border-radius: 4px; padding: 3px 10px; font-size: 10px; color: #666; margin-left: 8px; }
+  .desktop-screen { background: #fff; }
+
+  /* Admin layout */
+  .admin-layout { display: flex; min-height: 420px; }
+  .admin-sidebar { width: 170px; background: #18181b; padding: 16px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .admin-brand { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+  .admin-biz { font-size: 9px; color: #555; margin-bottom: 18px; }
+  .nav-item { padding: 7px 10px; border-radius: 6px; font-size: 10px; color: #666; margin-bottom: 2px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .nav-item.active { background: #2a2a2a; color: #fff; }
+  .nav-left { display: flex; align-items: center; gap: 7px; }
+  .nav-badge { background: #ef4444; color: #fff; border-radius: 10px; padding: 1px 6px; font-size: 8px; font-weight: 700; }
+  .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid #2a2a2a; }
+  .feedback-link { font-size: 9px; color: #555; display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 10px; border-radius: 6px; }
+  .feedback-link:hover { color: #888; }
+  .admin-main { flex: 1; padding: 20px; overflow: hidden; }
+  .admin-page-title { font-size: 15px; font-weight: 700; color: #18181b; margin-bottom: 3px; }
+  .admin-page-sub { font-size: 10px; color: #888; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .sound-toggle { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #888; }
+  .toggle-pill { width: 28px; height: 16px; background: #18181b; border-radius: 8px; position: relative; flex-shrink: 0; }
+  .toggle-pill::after { content: ''; position: absolute; right: 3px; top: 3px; width: 10px; height: 10px; background: #fff; border-radius: 50%; }
+  .toggle-pill.off { background: #e0e0e0; }
+  .toggle-pill.off::after { right: auto; left: 3px; }
+
+  /* Order queue tabs */
+  .queue-tabs { display: flex; border-bottom: 2px solid #f0f0f0; margin-bottom: 16px; }
+  .queue-tab { padding: 8px 14px; font-size: 11px; font-weight: 600; color: #aaa; cursor: pointer; position: relative; display: flex; align-items: center; gap: 5px; }
+  .queue-tab.active { color: #18181b; }
+  .queue-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: #18181b; }
+  .tab-count { background: #f0f0f0; color: #888; border-radius: 10px; padding: 1px 6px; font-size: 9px; font-weight: 700; }
+  .queue-tab.active .tab-count { background: #18181b; color: #fff; }
+  .tab-count.urgent { background: #ef4444; color: #fff; }
+
+  /* Order cards */
+  .order-cards { display: flex; flex-direction: column; gap: 10px; }
+  .order-card { border: 1.5px solid #e0e0e0; border-radius: 10px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
+  .order-card:hover { border-color: #18181b; }
+  .order-card.new { border-color: #ef4444; }
+  .order-card.expanded { border-color: #18181b; }
+  .order-card-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fafafa; }
+  .order-card.new .order-card-header { background: #fef2f2; }
+  .order-num { font-size: 18px; font-weight: 800; color: #18181b; min-width: 36px; }
+  .order-meta { flex: 1; }
+  .order-name { font-size: 12px; font-weight: 600; color: #18181b; }
+  .order-preview { font-size: 10px; color: #888; }
+  .order-time { font-size: 9px; color: #aaa; text-align: right; }
+  .order-time.urgent { color: #ef4444; font-weight: 700; }
+  .new-badge { background: #ef4444; color: #fff; font-size: 8px; font-weight: 700; border-radius: 4px; padding: 2px 6px; }
+  .order-card-body { padding: 12px 14px; border-top: 1px solid #f0f0f0; background: #fff; }
+  .order-items-list { margin-bottom: 12px; }
+  .order-item-line { display: flex; justify-content: space-between; font-size: 11px; color: #18181b; padding: 3px 0; border-bottom: 1px solid #f7f7f7; }
+  .order-item-line:last-child { border-bottom: none; }
+  .order-item-note { font-size: 9px; color: #f59e0b; margin-top: 1px; }
+  .order-total-row { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #18181b; padding-top: 8px; border-top: 1.5px solid #e0e0e0; margin-bottom: 12px; }
+  .order-actions { display: flex; gap: 8px; }
+  .btn-advance { flex: 1; background: #18181b; color: #fff; border: none; border-radius: 8px; padding: 9px; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .btn-back { background: transparent; color: #888; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 12px; font-size: 11px; cursor: pointer; }
+  .btn-danger { background: transparent; color: #ef4444; border: 1.5px solid #fecaca; border-radius: 8px; padding: 9px 12px; font-size: 11px; cursor: pointer; }
+
+  /* Payout dashboard */
+  .payout-hero { background: #18181b; border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+  .balance-label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .balance-amount { font-size: 32px; font-weight: 800; color: #fff; }
+  .balance-sub { font-size: 9px; color: #555; margin-top: 4px; }
+  .cashout-btn { background: #fff; color: #18181b; border: none; border-radius: 10px; padding: 12px 20px; font-size: 13px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+  .payout-history-title { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .payout-row { border: 1.5px solid #f0f0f0; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+  .payout-row-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; cursor: pointer; background: #fafafa; }
+  .payout-row-left { display: flex; align-items: center; gap: 10px; }
+  .payout-icon { font-size: 14px; }
+  .payout-date { font-size: 11px; font-weight: 600; color: #18181b; }
+  .payout-type { font-size: 9px; color: #888; }
+  .payout-amount { font-size: 13px; font-weight: 700; color: #18181b; }
+  .payout-chevron { font-size: 10px; color: #ccc; margin-left: 8px; }
+  .payout-row-detail { padding: 10px 14px; border-top: 1px solid #f0f0f0; background: #fff; }
+  .payout-detail-row { display: flex; justify-content: space-between; font-size: 10px; color: #888; padding: 3px 0; border-bottom: 1px solid #f7f7f7; }
+  .payout-detail-row:last-child { border-bottom: none; }
+  .payout-detail-row.net { font-weight: 700; color: #18181b; font-size: 11px; padding-top: 6px; border-top: 1.5px solid #e0e0e0; margin-top: 4px; }
+
+  /* Settings */
+  .settings-section { margin-bottom: 24px; }
+  .settings-section-title { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid #f0f0f0; }
+  .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f7f7f7; }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-label { font-size: 11px; font-weight: 600; color: #18181b; }
+  .settings-sub { font-size: 9px; color: #888; margin-top: 2px; }
+  .settings-value { font-size: 11px; color: #888; }
+  .settings-input { border: 1.5px solid #e0e0e0; border-radius: 6px; padding: 5px 10px; font-size: 11px; color: #18181b; width: 80px; text-align: center; }
+  .photo-upload-row { display: flex; gap: 10px; }
+  .photo-slot { border: 1.5px dashed #d0d0d0; border-radius: 10px; padding: 14px 10px; text-align: center; flex: 1; cursor: pointer; }
+  .photo-slot-icon { font-size: 20px; margin-bottom: 4px; }
+  .photo-slot-label { font-size: 9px; font-weight: 600; color: #18181b; margin-bottom: 2px; }
+  .photo-slot-sub { font-size: 8px; color: #aaa; }
+  .photo-slot.filled { border-color: #18181b; border-style: solid; background: #fafafa; }
+  .feedback-form { background: #f9f9f9; border-radius: 10px; padding: 14px; }
+  .feedback-textarea { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #18181b; height: 70px; resize: none; background: #fff; font-family: inherit; }
+  .btn-small { background: #18181b; color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 11px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+</style>
+</head>
+<body>
+
+<h1>QOA — Admin Wireframes</h1>
+
+<!-- ORDER QUEUE: PENDING TAB -->
+<div class="flow-title">Admin — Order Queue (Pending tab, new order)</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/orders</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Papito Mexican Food</div>
+        <div class="nav-item active">
+          <div class="nav-left">📋 Orders</div>
+          <div class="nav-badge">3</div>
+        </div>
+        <div class="nav-item"><div class="nav-left">🍽️ Menu</div></div>
+        <div class="nav-item"><div class="nav-left">💰 Payouts</div></div>
+        <div class="nav-item"><div class="nav-left">📊 Analytics</div></div>
+        <div class="nav-item"><div class="nav-left">⚙️ Settings</div></div>
+        <div class="sidebar-footer">
+          <div class="feedback-link">💬 Send feedback</div>
+        </div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Orders</div>
+        <div class="admin-page-sub">
+          <span>Today · 14 orders</span>
+          <div class="sound-toggle">
+            <span>🔊 Alert sound</span>
+            <div class="toggle-pill"></div>
+          </div>
+        </div>
+
+        <div class="queue-tabs">
+          <div class="queue-tab active">Pending <span class="tab-count urgent">3</span></div>
+          <div class="queue-tab">In Progress <span class="tab-count">2</span></div>
+          <div class="queue-tab">Ready <span class="tab-count">1</span></div>
+          <div class="queue-tab">Done <span class="tab-count">8</span></div>
+        </div>
+
+        <div class="order-cards">
+
+          <!-- New order — expanded -->
+          <div class="order-card new expanded">
+            <div class="order-card-header">
+              <div class="order-num">#47</div>
+              <div class="order-meta">
+                <div class="order-name">Marcus <span class="new-badge">NEW</span></div>
+                <div class="order-preview">Carne Asada × 2, Horchata</div>
+              </div>
+              <div class="order-time urgent">just now</div>
+            </div>
+            <div class="order-card-body">
+              <div class="order-items-list">
+                <div class="order-item-line">
+                  <span>Carne Asada Taco × 2</span><span>$9.00</span>
+                </div>
+                <div style="font-size:9px;color:#f59e0b;padding:2px 0 4px;">✏️ No onion, extra lime</div>
+                <div class="order-item-line">
+                  <span>Horchata × 1</span><span>$3.50</span>
+                </div>
+              </div>
+              <div class="order-total-row"><span>Total</span><span>$12.50</span></div>
+              <div class="order-actions">
+                <button class="btn-advance">Start Order →</button>
+                <button class="btn-danger">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pending — collapsed -->
+          <div class="order-card">
+            <div class="order-card-header">
+              <div class="order-num">#46</div>
+              <div class="order-meta">
+                <div class="order-name">Priya</div>
+                <div class="order-preview">Fish Taco × 1, Al Pastor × 2</div>
+              </div>
+              <div class="order-time">2 min ago</div>
+            </div>
+          </div>
+
+          <div class="order-card">
+            <div class="order-card-header">
+              <div class="order-num">#45</div>
+              <div class="order-meta">
+                <div class="order-name">Derek</div>
+                <div class="order-preview">Burrito × 1</div>
+              </div>
+              <div class="order-time">4 min ago</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER QUEUE: IN PROGRESS TAB -->
+<div class="flow-title">Admin — Order Queue (In Progress tab)</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/orders</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Papito Mexican Food</div>
+        <div class="nav-item active"><div class="nav-left">📋 Orders</div><div class="nav-badge">3</div></div>
+        <div class="nav-item"><div class="nav-left">🍽️ Menu</div></div>
+        <div class="nav-item"><div class="nav-left">💰 Payouts</div></div>
+        <div class="nav-item"><div class="nav-left">📊 Analytics</div></div>
+        <div class="nav-item"><div class="nav-left">⚙️ Settings</div></div>
+        <div class="sidebar-footer"><div class="feedback-link">💬 Send feedback</div></div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Orders</div>
+        <div class="admin-page-sub"><span>Today · 14 orders</span><div class="sound-toggle"><span>🔊 Alert sound</span><div class="toggle-pill"></div></div></div>
+        <div class="queue-tabs">
+          <div class="queue-tab">Pending <span class="tab-count urgent">3</span></div>
+          <div class="queue-tab active">In Progress <span class="tab-count">2</span></div>
+          <div class="queue-tab">Ready <span class="tab-count">1</span></div>
+          <div class="queue-tab">Done <span class="tab-count">8</span></div>
+        </div>
+        <div class="order-cards">
+          <div class="order-card expanded">
+            <div class="order-card-header">
+              <div class="order-num">#44</div>
+              <div class="order-meta">
+                <div class="order-name">Sofia</div>
+                <div class="order-preview">Al Pastor × 3, Agua Fresca</div>
+              </div>
+              <div class="order-time">6 min ago</div>
+            </div>
+            <div class="order-card-body">
+              <div class="order-items-list">
+                <div class="order-item-line"><span>Al Pastor Taco × 3</span><span>$13.50</span></div>
+                <div class="order-item-line"><span>Agua Fresca × 1</span><span>$3.00</span></div>
+              </div>
+              <div class="order-total-row"><span>Total</span><span>$16.50</span></div>
+              <div class="order-actions">
+                <button class="btn-advance">Mark Ready → SMS sent</button>
+                <button class="btn-back">← Back to Pending</button>
+              </div>
+            </div>
+          </div>
+          <div class="order-card">
+            <div class="order-card-header">
+              <div class="order-num">#43</div>
+              <div class="order-meta"><div class="order-name">James</div><div class="order-preview">Burrito × 1, Chips</div></div>
+              <div class="order-time">8 min ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER QUEUE: READY TAB -->
+<div class="flow-title">Admin — Order Queue (Ready tab — back-step available)</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/orders</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Papito Mexican Food</div>
+        <div class="nav-item active"><div class="nav-left">📋 Orders</div><div class="nav-badge">3</div></div>
+        <div class="nav-item"><div class="nav-left">🍽️ Menu</div></div>
+        <div class="nav-item"><div class="nav-left">💰 Payouts</div></div>
+        <div class="nav-item"><div class="nav-left">📊 Analytics</div></div>
+        <div class="nav-item"><div class="nav-left">⚙️ Settings</div></div>
+        <div class="sidebar-footer"><div class="feedback-link">💬 Send feedback</div></div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Orders</div>
+        <div class="admin-page-sub"><span>Today · 14 orders</span><div class="sound-toggle"><span>🔊 Alert sound</span><div class="toggle-pill"></div></div></div>
+        <div class="queue-tabs">
+          <div class="queue-tab">Pending <span class="tab-count urgent">3</span></div>
+          <div class="queue-tab">In Progress <span class="tab-count">2</span></div>
+          <div class="queue-tab active">Ready <span class="tab-count">1</span></div>
+          <div class="queue-tab">Done <span class="tab-count">8</span></div>
+        </div>
+        <div class="order-cards">
+          <div class="order-card expanded" style="border-color:#16a34a;">
+            <div class="order-card-header" style="background:#f0fdf4;">
+              <div class="order-num" style="color:#16a34a;">#42</div>
+              <div class="order-meta">
+                <div class="order-name">Joe</div>
+                <div class="order-preview">Carne Asada × 2, Horchata — SMS sent ✓</div>
+              </div>
+              <div class="order-time" style="color:#16a34a;">SMS sent 1m ago</div>
+            </div>
+            <div class="order-card-body">
+              <div class="order-items-list">
+                <div class="order-item-line"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+                <div class="order-item-line"><span>Horchata × 1</span><span>$3.50</span></div>
+              </div>
+              <div class="order-total-row"><span>Total</span><span>$12.50</span></div>
+              <div class="order-actions">
+                <button class="btn-advance" style="background:#16a34a;">Mark Done ✓</button>
+                <button class="btn-back">← Back to In Progress</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAYOUT DASHBOARD -->
+<div class="flow-title">Admin — Payout Dashboard</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/payouts</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Papito Mexican Food</div>
+        <div class="nav-item"><div class="nav-left">📋 Orders</div><div class="nav-badge">3</div></div>
+        <div class="nav-item"><div class="nav-left">🍽️ Menu</div></div>
+        <div class="nav-item active"><div class="nav-left">💰 Payouts</div></div>
+        <div class="nav-item"><div class="nav-left">📊 Analytics</div></div>
+        <div class="nav-item"><div class="nav-left">⚙️ Settings</div></div>
+        <div class="sidebar-footer"><div class="feedback-link">💬 Send feedback</div></div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Payouts</div>
+        <div class="admin-page-sub"><span>Deposits to Visa ···· 4821</span></div>
+
+        <div class="payout-hero">
+          <div>
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">$247.50</div>
+            <div class="balance-sub">Auto-deposits at 11pm · <span style="color:#444;">Next deposit in 3h 14m</span></div>
+          </div>
+          <button class="cashout-btn">Cash Out Now</button>
+        </div>
+
+        <div class="payout-history-title">Transaction History</div>
+
+        <!-- Expanded row -->
+        <div class="payout-row">
+          <div class="payout-row-header">
+            <div class="payout-row-left">
+              <div class="payout-icon">⬇️</div>
+              <div>
+                <div class="payout-date">Today, May 25</div>
+                <div class="payout-type">Auto-deposit · 11pm sweep</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;">
+              <div class="payout-amount">$184.20</div>
+              <div class="payout-chevron" style="transform:rotate(90deg);">›</div>
+            </div>
+          </div>
+          <div class="payout-row-detail">
+            <div class="payout-detail-row"><span>Order #38 — Marcus</span><span>$12.50</span></div>
+            <div class="payout-detail-row"><span>Order #39 — Priya</span><span>$18.75</span></div>
+            <div class="payout-detail-row"><span>Order #40 — Derek</span><span>$9.00</span></div>
+            <div class="payout-detail-row"><span>Order #41 — Sofia</span><span>$16.50</span></div>
+            <div class="payout-detail-row"><span>+ 9 more orders</span><span>$127.45</span></div>
+            <div class="payout-detail-row net"><span>Deposited</span><span>$184.20</span></div>
+          </div>
+        </div>
+
+        <!-- Collapsed rows -->
+        <div class="payout-row">
+          <div class="payout-row-header">
+            <div class="payout-row-left">
+              <div class="payout-icon">⬇️</div>
+              <div><div class="payout-date">May 24</div><div class="payout-type">Manual cash out · 2:14pm</div></div>
+            </div>
+            <div style="display:flex;align-items:center;"><div class="payout-amount">$63.30</div><div class="payout-chevron">›</div></div>
+          </div>
+        </div>
+
+        <div class="payout-row">
+          <div class="payout-row-header">
+            <div class="payout-row-left">
+              <div class="payout-icon">⬇️</div>
+              <div><div class="payout-date">May 23</div><div class="payout-type">Auto-deposit · 11pm sweep</div></div>
+            </div>
+            <div style="display:flex;align-items:center;"><div class="payout-amount">$201.75</div><div class="payout-chevron">›</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="flow-title">Admin — Settings</div>
+<div class="desktop-frame">
+  <div class="desktop-titlebar">
+    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+    <div class="url-bar">qoa.app/admin/settings</div>
+  </div>
+  <div class="desktop-screen">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-brand">QOA</div>
+        <div class="admin-biz">Papito Mexican Food</div>
+        <div class="nav-item"><div class="nav-left">📋 Orders</div><div class="nav-badge">3</div></div>
+        <div class="nav-item"><div class="nav-left">🍽️ Menu</div></div>
+        <div class="nav-item"><div class="nav-left">💰 Payouts</div></div>
+        <div class="nav-item"><div class="nav-left">📊 Analytics</div></div>
+        <div class="nav-item active"><div class="nav-left">⚙️ Settings</div></div>
+        <div class="sidebar-footer"><div class="feedback-link">💬 Send feedback</div></div>
+      </div>
+      <div class="admin-main">
+        <div class="admin-page-title">Settings</div>
+        <div class="admin-page-sub"><span>Papito Mexican Food · qoa.app/papito</span></div>
+
+        <!-- Business -->
+        <div class="settings-section">
+          <div class="settings-section-title">Business</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Business Name</div><div class="settings-sub">Shown to customers</div></div>
+            <div class="settings-value">Papito Mexican Food</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Category</div></div>
+            <div class="settings-value">Food Truck ▾</div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Your URL</div></div>
+            <div class="settings-value" style="font-size:10px;">qoa.app/papito</div>
+          </div>
+        </div>
+
+        <!-- Branding -->
+        <div class="settings-section">
+          <div class="settings-section-title">Branding</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Photo &amp; Logo</div><div class="settings-sub">Used for page header and home screen icon</div></div>
+          </div>
+          <div class="photo-upload-row">
+            <div class="photo-slot filled">
+              <div class="photo-slot-icon">🌮</div>
+              <div class="photo-slot-label">Storefront Photo</div>
+              <div class="photo-slot-sub">Tap to replace</div>
+            </div>
+            <div class="photo-slot">
+              <div class="photo-slot-icon">＋</div>
+              <div class="photo-slot-label">Logo</div>
+              <div class="photo-slot-sub">Optional</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders -->
+        <div class="settings-section">
+          <div class="settings-section-title">Orders</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Estimated Wait Time</div><div class="settings-sub">Shown to customer after order placed</div></div>
+            <div style="display:flex;align-items:center;gap:6px;"><input class="settings-input" value="12" /><span style="font-size:10px;color:#888;">min</span></div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Shipping</div><div class="settings-sub">Show shipping option at checkout</div></div>
+            <div class="toggle-pill off"></div>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-label">Accept Orders</div><div class="settings-sub">Pause to stop new orders coming in</div></div>
+            <div class="toggle-pill"></div>
+          </div>
+        </div>
+
+        <!-- Loyalty (V2) -->
+        <div class="settings-section">
+          <div class="settings-section-title">Loyalty — V2</div>
+          <div class="settings-row">
+            <div><div class="settings-label">Buy 10 Get 1 Free</div><div class="settings-sub">Automatic stamp card per customer</div></div>
+            <div class="toggle-pill off"></div>
+          </div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="settings-section">
+          <div class="settings-section-title">Send Feedback</div>
+          <div class="feedback-form">
+            <div style="font-size:10px;color:#888;margin-bottom:8px;">Bug report, feature request, or just saying hi. We read everything.</div>
+            <textarea class="feedback-textarea" placeholder="What's on your mind..."></textarea>
+            <button class="btn-small">Send →</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

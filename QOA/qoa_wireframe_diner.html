@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 24px; }
+  h1 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 32px; }
+  .flow-title { font-size: 13px; font-weight: 700; color: #aaa; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #222; }
+  .flow-row { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 48px; flex-wrap: wrap; }
+  .flow-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .arrow { display: flex; align-items: center; padding-top: 44px; color: #444; font-size: 20px; flex-shrink: 0; }
+
+  .mobile { width: 210px; flex-shrink: 0; }
+  .mobile-frame { background: #1a1a1a; border: 1.5px solid #333; border-radius: 30px; padding: 12px; }
+  .mobile-notch { width: 60px; height: 6px; background: #333; border-radius: 3px; margin: 0 auto 10px; }
+  .mobile-screen { background: #fff; border-radius: 18px; min-height: 400px; overflow: hidden; position: relative; }
+  .screen-content { font-size: 11px; color: #1a1a1a; }
+
+  /* Restaurant header */
+  .rest-hero { position: relative; height: 90px; background: #18181b; overflow: hidden; }
+  .rest-hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+  .rest-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.7) 100%); }
+  .rest-hero-content { position: absolute; bottom: 10px; left: 12px; right: 12px; }
+  .rest-name { font-size: 15px; font-weight: 800; color: #fff; }
+  .rest-meta { font-size: 9px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .rest-logo-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+
+  /* Install banner */
+  .install-banner { background: #18181b; padding: 7px 12px; display: flex; align-items: center; justify-content: space-between; }
+  .install-text { font-size: 9px; color: #888; }
+  .install-btn { font-size: 9px; font-weight: 700; color: #fff; background: transparent; border: 1px solid #444; border-radius: 4px; padding: 3px 8px; cursor: pointer; }
+
+  /* Menu browser */
+  .menu-browser { padding: 0; }
+  .category-row { border-bottom: 1px solid #f0f0f0; }
+  .category-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; cursor: pointer; }
+  .category-name { font-size: 12px; font-weight: 700; color: #18181b; }
+  .category-count { font-size: 9px; color: #aaa; margin-left: 6px; }
+  .category-chevron { font-size: 11px; color: #ccc; }
+  .category-chevron.open { transform: rotate(90deg); display: inline-block; }
+
+  /* Expanded category items */
+  .category-items { padding: 0 14px 8px; }
+  .item-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f7f7f7; }
+  .item-row:last-child { border-bottom: none; }
+  .item-thumb { width: 44px; height: 44px; border-radius: 8px; background: #f0f0f0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .item-info { flex: 1; }
+  .item-name { font-size: 11px; font-weight: 600; color: #18181b; }
+  .item-desc { font-size: 9px; color: #888; line-height: 1.4; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+  .item-price { font-size: 11px; font-weight: 600; color: #18181b; flex-shrink: 0; }
+  .item-add { width: 22px; height: 22px; background: #18181b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; font-weight: 300; flex-shrink: 0; cursor: pointer; }
+
+  /* Item detail */
+  .item-detail-photo { height: 130px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 48px; position: relative; }
+  .item-detail-back { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.4); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
+  .item-detail-body { padding: 14px; }
+  .item-detail-name { font-size: 15px; font-weight: 800; color: #18181b; margin-bottom: 4px; }
+  .item-detail-desc { font-size: 10px; color: #666; line-height: 1.5; margin-bottom: 12px; }
+  .item-detail-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .item-detail-price { font-size: 16px; font-weight: 800; color: #18181b; }
+  .qty-control { display: flex; align-items: center; gap: 10px; }
+  .qty-btn { width: 26px; height: 26px; border: 1.5px solid #e0e0e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #18181b; cursor: pointer; }
+  .qty-num { font-size: 13px; font-weight: 700; color: #18181b; }
+  .request-row { display: flex; align-items: center; gap: 8px; padding: 9px 0; border-top: 1px solid #f0f0f0; }
+  .request-icon { font-size: 14px; }
+  .request-text { font-size: 10px; color: #888; flex: 1; }
+  .request-input { width: 100%; border: 1.5px solid #18181b; border-radius: 8px; padding: 8px 10px; font-size: 10px; color: #1a1a1a; background: #f9f9f9; margin-top: 8px; }
+
+  /* Sticky cart */
+  .sticky-cart { position: absolute; bottom: 0; left: 0; right: 0; background: #18181b; border-radius: 0 0 18px 18px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .cart-left { display: flex; align-items: center; gap: 8px; }
+  .cart-badge { background: #fff; color: #18181b; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .cart-label { font-size: 11px; font-weight: 600; color: #fff; }
+  .cart-total { font-size: 12px; font-weight: 700; color: #fff; }
+
+  /* Cart expanded */
+  .cart-sheet { background: #fff; border-radius: 18px 18px 0 0; padding: 16px; }
+  .cart-handle { width: 32px; height: 3px; background: #e0e0e0; border-radius: 2px; margin: 0 auto 12px; }
+  .cart-title { font-size: 13px; font-weight: 700; color: #18181b; margin-bottom: 12px; }
+  .cart-item-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #f7f7f7; }
+  .cart-item-name { font-size: 11px; font-weight: 600; color: #18181b; flex: 1; }
+  .cart-item-note { font-size: 9px; color: #aaa; }
+  .cart-item-price { font-size: 11px; color: #18181b; }
+  .cart-item-remove { font-size: 10px; color: #ccc; }
+  .cart-subtotal { display: flex; justify-content: space-between; padding: 10px 0 0; }
+  .cart-subtotal-label { font-size: 11px; color: #888; }
+  .cart-subtotal-amount { font-size: 12px; font-weight: 700; color: #18181b; }
+
+  /* Checkout */
+  .checkout-header { background: #18181b; padding: 14px; display: flex; align-items: center; gap: 10px; }
+  .checkout-back { font-size: 14px; color: #666; }
+  .checkout-title { font-size: 13px; font-weight: 700; color: #fff; }
+  .checkout-body { padding: 14px; }
+  .field-group { margin-bottom: 12px; }
+  .field-label { font-size: 8px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .field-input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 10px; font-size: 11px; color: #1a1a1a; background: #f9f9f9; }
+  .field-input.focused { border-color: #18181b; }
+  .field-hint { font-size: 8px; color: #aaa; margin-top: 3px; line-height: 1.4; }
+  .stripe-field { border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 8px 10px; background: #f9f9f9; display: flex; align-items: center; justify-content: space-between; }
+  .stripe-placeholder { font-size: 10px; color: #aaa; }
+  .stripe-icons { display: flex; gap: 4px; font-size: 14px; }
+  .order-summary { background: #f9f9f9; border-radius: 8px; padding: 10px; margin-bottom: 12px; }
+  .summary-row { display: flex; justify-content: space-between; font-size: 10px; color: #888; padding: 2px 0; }
+  .summary-row.total { font-size: 12px; font-weight: 700; color: #18181b; padding-top: 6px; border-top: 1px solid #e0e0e0; margin-top: 4px; }
+  .btn-pay { width: 100%; background: #18181b; color: #fff; border: none; border-radius: 10px; padding: 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+
+  /* Confirmation */
+  .confirm-header { background: #18181b; padding: 20px 14px; text-align: center; }
+  .confirm-icon { font-size: 32px; margin-bottom: 8px; }
+  .confirm-title { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+  .confirm-sub { font-size: 10px; color: #666; }
+  .confirm-body { padding: 14px; }
+  .confirm-card { background: #f9f9f9; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  .confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+  .confirm-label { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .confirm-value { font-size: 11px; font-weight: 600; color: #18181b; }
+  .confirm-value.big { font-size: 20px; font-weight: 800; }
+  .sms-notice { background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 10px 12px; display: flex; gap: 8px; align-items: flex-start; }
+  .sms-icon { font-size: 16px; flex-shrink: 0; }
+  .sms-text { font-size: 9px; color: #166534; line-height: 1.5; }
+
+  /* SMS / status screen */
+  .sms-screen-header { background: #18181b; padding: 16px 14px; text-align: center; }
+  .sms-ready-icon { font-size: 36px; margin-bottom: 8px; }
+  .sms-ready-title { font-size: 15px; font-weight: 800; color: #fff; }
+  .sms-ready-sub { font-size: 10px; color: #666; margin-top: 3px; }
+  .sms-body { padding: 14px; }
+  .pickup-card { background: #18181b; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 12px; }
+  .pickup-label { font-size: 9px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .pickup-number { font-size: 36px; font-weight: 800; color: #fff; }
+  .pickup-name { font-size: 11px; color: #888; margin-top: 4px; }
+  .order-items-recap { background: #f9f9f9; border-radius: 10px; padding: 10px 12px; }
+  .recap-title { font-size: 9px; font-weight: 700; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+  .recap-item { font-size: 10px; color: #18181b; padding: 3px 0; border-bottom: 1px solid #eee; }
+  .recap-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<h1>QOA — Diner Flow Wireframes</h1>
+
+<div class="flow-title">Flow 1 — Browse & Order</div>
+<div class="flow-row">
+
+  <!-- Screen 1: Restaurant landing -->
+  <div class="mobile">
+    <div class="flow-label">1. Restaurant Landing</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="rest-hero">
+          <div class="rest-logo-placeholder">🌮</div>
+          <div class="rest-hero-overlay"></div>
+          <div class="rest-hero-content">
+            <div class="rest-name">Papito Mexican Food</div>
+            <div class="rest-meta">The Mission · Open now</div>
+          </div>
+        </div>
+        <div class="install-banner">
+          <div class="install-text">Add Papito to your home screen</div>
+          <div class="install-btn">Add</div>
+        </div>
+        <div class="menu-browser">
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Tacos</span><span class="category-count">6 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Burritos</span><span class="category-count">4 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Drinks</span><span class="category-count">3 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Sides</span><span class="category-count">3 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Screen 2: Category expanded -->
+  <div class="mobile">
+    <div class="flow-label">2. Category Expanded</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="rest-hero" style="height:60px;">
+          <div class="rest-logo-placeholder" style="font-size:20px;">🌮</div>
+          <div class="rest-hero-overlay"></div>
+          <div class="rest-hero-content" style="bottom:6px;">
+            <div class="rest-name" style="font-size:12px;">Papito Mexican Food</div>
+          </div>
+        </div>
+        <div class="menu-browser">
+          <div class="category-row" style="background:#fafafa;">
+            <div class="category-header">
+              <div><span class="category-name">Tacos</span><span class="category-count">6 items</span></div>
+              <div class="category-chevron open">›</div>
+            </div>
+            <div class="category-items">
+              <div class="item-row">
+                <div class="item-thumb">🥩</div>
+                <div class="item-info"><div class="item-name">Carne Asada</div><div class="item-desc">Grilled steak, onion, cilantro</div></div>
+                <div class="item-price">$4.50</div>
+                <div class="item-add">+</div>
+              </div>
+              <div class="item-row">
+                <div class="item-thumb">🐟</div>
+                <div class="item-info"><div class="item-name">Fish Taco</div><div class="item-desc">Baja style, cabbage, crema</div></div>
+                <div class="item-price">$4.75</div>
+                <div class="item-add">+</div>
+              </div>
+              <div class="item-row">
+                <div class="item-thumb" style="font-size:10px;color:#aaa;">No img</div>
+                <div class="item-info"><div class="item-name">Al Pastor</div><div class="item-desc">Marinated pork, pineapple</div></div>
+                <div class="item-price">$4.50</div>
+                <div class="item-add">+</div>
+              </div>
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Burritos</span><span class="category-count">4 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+          <div class="category-row">
+            <div class="category-header">
+              <div><span class="category-name">Drinks</span><span class="category-count">3 items</span></div>
+              <div class="category-chevron">›</div>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Screen 3: Item detail -->
+  <div class="mobile">
+    <div class="flow-label">3. Item Detail</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen" style="position:relative;"><div class="screen-content">
+        <div class="item-detail-photo">
+          🥩
+          <div class="item-detail-back">←</div>
+        </div>
+        <div class="item-detail-body">
+          <div class="item-detail-name">Carne Asada Taco</div>
+          <div class="item-detail-desc">Grilled skirt steak, white onion, fresh cilantro, lime. Two per order.</div>
+          <div class="item-detail-row">
+            <div class="item-detail-price">$4.50</div>
+            <div class="qty-control">
+              <div class="qty-btn">−</div>
+              <div class="qty-num">1</div>
+              <div class="qty-btn">+</div>
+            </div>
+          </div>
+          <div class="request-row">
+            <div class="request-icon">✏️</div>
+            <div class="request-text" style="color:#aaa;">Special request...</div>
+          </div>
+          <div class="request-input">No onion please, extra lime</div>
+        </div>
+        <div style="padding:0 14px 14px;">
+          <button style="width:100%;background:#18181b;color:#fff;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;">Add to Order · $4.50</button>
+        </div>
+        <div class="sticky-cart" style="position:relative;border-radius:10px;margin:0 14px 14px;">
+          <div class="cart-left">
+            <div class="cart-badge">2</div>
+            <div class="cart-label">View Order</div>
+          </div>
+          <div class="cart-total">$9.00</div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Screen 4: Cart expanded -->
+  <div class="mobile">
+    <div class="flow-label">4. Cart</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen" style="position:relative;"><div class="screen-content">
+        <div style="height:80px;background:#f9f9f9;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;">
+          <div class="cart-sheet">
+            <div class="cart-handle"></div>
+            <div class="cart-title">Your Order</div>
+            <div class="cart-item-row">
+              <div style="flex:1;">
+                <div class="cart-item-name">Carne Asada Taco × 2</div>
+                <div class="cart-item-note">No onion, extra lime</div>
+              </div>
+              <div class="cart-item-price">$9.00</div>
+              <div class="cart-item-remove">✕</div>
+            </div>
+            <div class="cart-item-row">
+              <div style="flex:1;">
+                <div class="cart-item-name">Horchata × 1</div>
+              </div>
+              <div class="cart-item-price">$3.50</div>
+              <div class="cart-item-remove">✕</div>
+            </div>
+            <div class="cart-subtotal">
+              <div class="cart-subtotal-label">Subtotal</div>
+              <div class="cart-subtotal-amount">$12.50</div>
+            </div>
+            <div style="margin-top:12px;">
+              <button style="width:100%;background:#18181b;color:#fff;border:none;border-radius:10px;padding:11px;font-size:12px;font-weight:700;cursor:pointer;">Checkout →</button>
+            </div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FLOW 2: CHECKOUT + CONFIRM -->
+<div class="flow-title">Flow 2 — Checkout & Confirmation</div>
+<div class="flow-row">
+
+  <!-- Screen 5: Checkout -->
+  <div class="mobile">
+    <div class="flow-label">5. Checkout</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="checkout-header">
+          <div class="checkout-back">←</div>
+          <div class="checkout-title">Checkout</div>
+        </div>
+        <div class="checkout-body">
+          <div class="order-summary">
+            <div class="summary-row"><span>Carne Asada Taco × 2</span><span>$9.00</span></div>
+            <div class="summary-row"><span>Horchata × 1</span><span>$3.50</span></div>
+            <div class="summary-row total"><span>Total</span><span>$12.50</span></div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Your Name</div>
+            <div class="field-input focused">Joe</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Mobile Number</div>
+            <div class="field-input">(415) 555-0192</div>
+            <div class="field-hint">We'll text you when your order is ready. Nothing else.</div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">Payment</div>
+            <div class="stripe-field">
+              <div class="stripe-placeholder">Card number</div>
+              <div class="stripe-icons">💳</div>
+            </div>
+          </div>
+          <button class="btn-pay">Pay $12.50</button>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Screen 6: Confirmation -->
+  <div class="mobile">
+    <div class="flow-label">6. Confirmation</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="confirm-header">
+          <div class="confirm-icon">✅</div>
+          <div class="confirm-title">Order placed!</div>
+          <div class="confirm-sub">Papito Mexican Food</div>
+        </div>
+        <div class="confirm-body">
+          <div class="confirm-card">
+            <div class="confirm-row">
+              <div class="confirm-label">Order</div>
+              <div class="confirm-value big">#42</div>
+            </div>
+            <div class="confirm-row" style="margin-top:8px;">
+              <div class="confirm-label">Est. wait</div>
+              <div class="confirm-value">~12 min</div>
+            </div>
+            <div class="confirm-row">
+              <div class="confirm-label">Total</div>
+              <div class="confirm-value">$12.50</div>
+            </div>
+          </div>
+          <div class="sms-notice">
+            <div class="sms-icon">💬</div>
+            <div class="sms-text">We'll text <strong>(415) 555-0192</strong> when your order is ready. You don't need to watch the screen.</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="arrow">→</div>
+
+  <!-- Screen 7: SMS tapped — order ready -->
+  <div class="mobile">
+    <div class="flow-label">7. Order Ready (SMS link)</div>
+    <div class="mobile-frame"><div class="mobile-notch"></div>
+      <div class="mobile-screen"><div class="screen-content">
+        <div class="sms-screen-header">
+          <div class="sms-ready-icon">🎉</div>
+          <div class="sms-ready-title">Your order is ready!</div>
+          <div class="sms-ready-sub">Papito Mexican Food</div>
+        </div>
+        <div class="sms-body">
+          <div class="pickup-card">
+            <div class="pickup-label">Pick up order</div>
+            <div class="pickup-number">#42</div>
+            <div class="pickup-name">Joe</div>
+          </div>
+          <div class="order-items-recap">
+            <div class="recap-title">Your items</div>
+            <div class="recap-item">Carne Asada Taco × 2 — no onion</div>
+            <div class="recap-item">Horchata × 1</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
